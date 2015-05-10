@@ -1,0 +1,132 @@
+<html>
+<head>
+<meta name='viewport' content='width=device-width'>
+<title></title>
+<style>
+body
+{
+	padding: 0px;
+	margin: 0px;
+}
+#container
+{
+	height: 100%;
+	padding: 10px;
+	text-align: center;
+}
+#calibrator
+{
+	height: 100%;
+	width: 100%;
+	text-align: center;
+	z-index: 1;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	background-color: #DCDCDC;
+	padding: 10px;
+}
+</style>
+<script>
+var accelerationX;
+var accelerationY;
+var accelerationZ;
+var xOffset = 0;
+var yOffset = 0;
+var zOffset = 0;
+window.ondevicemotion = function(e) {  
+    accelerationX = event.acceleration.x;  
+    accelerationY = event.acceleration.y;  
+    accelerationZ = event.acceleration.z; 
+	if(calibrating)
+	{
+		calibrate();
+	}
+	else
+	{
+		checkFlick();
+	}
+}
+
+function checkFlick()
+{
+	document.getElementById('debuginfo').innerHTML = 'Acceleration X: '+Math.round(accelerationX - xOffset)+'<br>Acceleration Y:'+Math.round(accelerationY - yOffset)+'<br>Acceleration Z:'+Math.round(accelerationZ - zOffset);
+	y = Math.round(Math.abs(accelerationY - yOffset));
+	z = Math.round(Math.abs(accelerationZ - zOffset));
+	if(y > 8 || z > 8)
+	{
+		document.getElementById('container').style.backgroundColor = 'red';
+	}
+	else
+	{
+		document.getElementById('container').style.background = 'white';
+	}
+}
+
+var totalx = 0;
+var totaly = 0;
+var totalz = 0;
+
+var meanx = 0;
+var meany = 0;
+var meanz = 0;
+
+var calibrateOffset = 0.8;
+
+var donetime = new Date().getTime() + 5000;
+var amountOfMeasures = 0;
+
+function calibrate()
+{
+	
+	if(Math.abs(accelerationX - meanx) > calibrateOffset || Math.abs(accelerationY - meany) > calibrateOffset || Math.abs(accelerationZ - meanz) > calibrateOffset)
+	{
+		// Restart
+		totalx = 0;
+		totaly = 0;
+		totalz = 0;
+		meanx = 0;
+		meany = 0;
+		meanz = 0;
+		amountOfMeasures = 0;
+		donetime = new Date().getTime() + 5000;
+	}
+	totalx += accelerationX;
+	totaly += accelerationY;
+	totalz += accelerationZ;
+	amountOfMeasures++;
+	meanx = totalx/amountOfMeasures;
+	meany = totaly/amountOfMeasures;
+	meanz = totalz/amountOfMeasures;
+	
+	if(new Date().getTime() >= donetime)
+	{
+		// Done calibrating
+		xOffset = meanx;
+		yOffset = meany;
+		zOffset = meanz;
+		calibrating = false;
+		var el = document.getElementById('calibrator');
+		el.parentNode.removeChild(el);
+	}
+	else
+	{
+		document.getElementById('countdown').innerHTML = Math.ceil((donetime - new Date().getTime())/1000);
+	}
+}
+
+calibrating = true;
+</script>
+</head>
+<body>
+<div id='calibrator'>
+Lay down your phone on the table to calibrate the motion sensor.<br>
+<br>
+Lay still <span id='countdown'>5</span> more seconds
+</div>
+<div style='background-color: white;' id='container'>
+Flick up<br>
+<span id='debuginfo'>No accelerometer detected</span>
+</div>
+</body>
+</html>
