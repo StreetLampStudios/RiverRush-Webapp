@@ -1,0 +1,51 @@
+default:
+  - 'lint:modify'
+  - 'test'
+  - 'build'
+
+'lint:modify':
+  - 'jsbeautifier:modify'
+  - 'jshint'
+  - 'jscs'
+  - 'jsonlint'
+
+'lint:verify':
+  - 'jsbeautifier:verify'
+  - 'jshint'
+  - 'jscs'
+  - 'jsonlint'
+
+'build:dev':
+  - 'clean:dev'
+  - 'wiredep'
+  - 'concurrent:dev'
+  - 'autoprefixer'
+
+'build:dist':
+  - 'clean:dist'
+  - 'wiredep'
+  - 'useminPrepare'
+  - 'concurrent:dist'
+  - 'autoprefixer'
+  - 'concat'
+  - 'cssmin'
+  - 'uglify'
+  - 'copy:dist'
+  - 'filerev'
+  - 'usemin'
+  - 'htmlmin'
+
+'serve:dev':
+  - 'build:dev'
+  - 'browserSync:server'
+  - 'watch'
+
+'serve:dist':
+  - 'build:dist'
+  - 'browserSync:server'
+
+test:
+  - 'clean:dev'
+  - 'concurrent:test'
+  - 'autoprefixer'
+  - 'karma:travis'
