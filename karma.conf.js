@@ -4,17 +4,17 @@ module.exports = function(config) {
     frameworks: ['jasmine'],
     files: [
       'app/assets/scripts/**/*.js',
-      'test/tests/**/test_*.js'
+      'test/spec/**/test_*.js'
     ],
     exclude: [
     ],
     preprocessors: {
-      'build/tests/**/*.js': ['coverage']
+      'app/assets/scripts/**/*.js': ['coverage']
     },
     reporters: ['dots', 'coverage'],
     coverageReporter: {
       type: 'lcov',
-      dir: 'build/coverage/'
+      dir: 'dist/coverage/'
     },
     port: 9876,
     colors: true,
