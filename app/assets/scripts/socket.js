@@ -5,7 +5,7 @@ var webSocket =
 	var connection;
 	var displayFunction;
 	var webSocket = {
-		socketURL: "ws://localhost:8084",
+		socketURL: "ws://localhost:"+window.prompt('Connect at which port?'),
 		output: null,
 		init: function()
 		{
@@ -25,7 +25,7 @@ var webSocket =
 		onClose: function(evt) { webSocket.writeToScreen("DISCONNECTED"); },
 		sendTest: function()
 		{
-			webSocket.doSend(window.prompt("send what?"));
+			webSocket.doSend(window.prompt("Send what?"));
 		},
 		onMessage: function(evt)
 		{
