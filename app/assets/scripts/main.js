@@ -95,7 +95,7 @@ var ctx;
 
 var monkeyImage = [];
 monkeyImage['normal'] = new Image();
-monkeyImage['normal'].src = 'monkey_normal.png';
+monkeyImage['normal'].src = './assets/images/monkey_normal.png';
 
 window.onload = function()
 {
