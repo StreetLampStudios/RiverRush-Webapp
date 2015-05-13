@@ -3,6 +3,7 @@
     <meta name='viewport' content='width=device-width,user-scalable=no'>
     <title>Web app</title>
     <LINK href="./assets/styles/stylesheet.css" rel="stylesheet" type="text/css">
+	<script type="text/javascript" src="./assets/scripts/socket.js"></script>
     <script type="text/javascript" src="./assets/scripts/main.js"></script>
   </head>
   <body>
@@ -11,6 +12,8 @@
       <span id='debuginfo'>No accelerometer detected</span>
       <br>
       <canvas id='drawCanvas' width="200" height="200"></canvas>
+	  <br>
+	  <div id='output'></div><input type='button' value='Send a message to the socket' onClick='sendTest();'>
     </div>
     <div id='swipehelp' style='opacity: 0;' class='overlaycontainer'>
       <div class='overlay'>

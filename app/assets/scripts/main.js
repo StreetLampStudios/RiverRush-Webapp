@@ -97,25 +97,33 @@ var monkeyImage = [];
 monkeyImage['normal'] = new Image();
 monkeyImage['normal'].src = './assets/images/monkey_normal.png';
 
+function sendTest()
+{
+	webSocket.sendTest();
+}
+
 window.onload = function()
 {
-// Decide on input method
-console.log(window.DeviceMotionEvent);
-if (accelerometer_supported)
-{
-  input_method = 'accelerometer';
-  document.getElementById('flickhelp').style.opacity = 0.8;
-}
-else
-{
-  input_method = 'swipe';
-  document.getElementById('swipehelp').style.opacity = 0.8;
-}
+	// Decide on input method
+	console.log(window.DeviceMotionEvent);
+	if (accelerometer_supported)
+	{
+	  input_method = 'accelerometer';
+	  document.getElementById('flickhelp').style.opacity = 0.8;
+	}
+	else
+	{
+	  input_method = 'swipe';
+	  document.getElementById('swipehelp').style.opacity = 0.8;
+	}
+	
+	// Connect to the socket
+	webSocket.init();
 
-document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
+	document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
 
-c = document.getElementById("drawCanvas");
-ctx = c.getContext("2d");
+	c = document.getElementById("drawCanvas");
+	ctx = c.getContext("2d");
 }
 
 function choose_side(side)
