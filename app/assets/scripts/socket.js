@@ -21,17 +21,16 @@ var webSocket =
 			socket.onmessage = function(evt) { webSocket.onMessage(evt) };
 			socket.onerror = function(evt) { webSocket.onError(evt) };
 		} ,
-		onOpen: function(evt) { webSocket.writeToScreen("CONNECTED"); alert('connected to the server'); },
-		onClose: function(evt) { webSocket.writeToScreen("DISCONNECTED"); },
+		onOpen: function(evt) { this.writeToScreen("CONNECTED"); alert('connected to the server'); },
+		onClose: function(evt) { this.writeToScreen("DISCONNECTED"); },
 		sendTest: function()
 		{
-			webSocket.doSend(window.prompt("Send what?"));
+			this.doSend(window.prompt("Send what?"));
 		},
 		onMessage: function(evt)
 		{
 			alert('response got');
 			this.writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
-			socket.close();
 		},
 		onError: function(evt)
 		{
