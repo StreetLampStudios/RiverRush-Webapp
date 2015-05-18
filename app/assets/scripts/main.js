@@ -46,9 +46,10 @@ if(overlayvisible)
 
 function jump(timestamp)
 {
-turnOffOverlay();
-monkeyJump = timestamp;
-// Send jump signal here
+	turnOffOverlay();
+	monkeyJump = timestamp;
+	// Send jump signal here
+	webSocket.sendJumpEvent();
 }
 
 function step(timestamp) {

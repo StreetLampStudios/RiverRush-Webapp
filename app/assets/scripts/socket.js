@@ -2,7 +2,7 @@ var webSocket =
 (function ()
 {
 	var socket;
-	var connection;
+	var connection = false;
 	var displayFunction;
 	var webSocket = {
 		socketURL: "ws://localhost:"+window.prompt('Connect at which port?'),
@@ -21,20 +21,24 @@ var webSocket =
 			socket.onmessage = function(evt) { webSocket.onMessage(evt) };
 			socket.onerror = function(evt) { webSocket.onError(evt) };
 		} ,
-		onOpen: function(evt) { this.writeToScreen("CONNECTED"); alert('connected to the server'); },
-		onClose: function(evt) { this.writeToScreen("DISCONNECTED"); },
+		onOpen: function(evt) { connection = true; this.writeToScreen("CONNECTED"); alert('connected to the server'); },
+		onClose: function(evt) { connection = false; this.writeToScreen("DISCONNECTED"); },
 		sendTest: function()
 		{
 			this.doSend(window.prompt("Send what?"));
 		},
+		sendJumpEvent: function()
+		{
+			this.doSend("event=JumpEvent");
+		},
 		onMessage: function(evt)
 		{
-			alert('response got');
 			this.writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
 		},
 		onError: function(evt)
 		{
 			var errormsg = evt.data;
+			connection = false;
 			if(!evt.data)
 			{
 				errormsg = 'Could not connect to the server at '+this.socketURL;
@@ -43,6 +47,7 @@ var webSocket =
 		},
 		doSend: function(message)
 		{
+			if(!connection) { return; } // Only send something when a connection is open
 			this.writeToScreen("SENT: " + message);
 			socket.send(message);
 		},
