@@ -5,7 +5,7 @@ var webSocket =
 	var connection = false;
 	var displayFunction;
 	var webSocket = {
-		socketURL: "ws://localhost:"+window.prompt('Connect at which port?'),
+		socketURL: "ws://localhost:8080",
 		output: null,
 		init: function()
 		{
@@ -21,8 +21,8 @@ var webSocket =
 			socket.onmessage = function(evt) { webSocket.onMessage(evt) };
 			socket.onerror = function(evt) { webSocket.onError(evt) };
 		} ,
-		onOpen: function(evt) { connection = true; this.writeToScreen("CONNECTED"); alert('connected to the server'); },
-		onClose: function(evt) { connection = false; this.writeToScreen("DISCONNECTED"); },
+		onOpen: function(evt) { connection = true; if(onLoadingScreen) { socketOpened(); } this.writeToScreen("CONNECTED"); alert('connected to the server'); },
+		onClose: function(evt) { connection = false; socketDisconnect(); this.writeToScreen("DISCONNECTED"); },
 		sendTest: function()
 		{
 			this.doSend(window.prompt("Send what?"));
@@ -43,6 +43,7 @@ var webSocket =
 			{
 				errormsg = 'Could not connect to the server at '+this.socketURL;
 			}
+			if(onLoadingScreen) { socketOpenError(); } else { socketDisconnect(); }
 			this.writeToScreen('<span style="color: red;">ERROR:</span> ' + errormsg);
 		},
 		doSend: function(message)

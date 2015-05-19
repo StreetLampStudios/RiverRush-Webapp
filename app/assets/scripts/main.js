@@ -52,6 +52,45 @@ function jump(timestamp)
 	webSocket.sendJumpEvent();
 }
 
+var onLoadingScreen = true;
+
+function socketOpened()
+{
+	// Decide on input method
+	console.log(window.DeviceMotionEvent);
+	if (accelerometer_supported)
+	{
+	  input_method = 'accelerometer';
+	  document.getElementById('flickhelp').style.opacity = 0.8;
+	}
+	else
+	{
+	  input_method = 'swipe';
+	  document.getElementById('swipehelp').style.opacity = 0.8;
+	}
+	document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
+	c = document.getElementById("drawCanvas");
+	ctx = c.getContext("2d");
+	onLoadingScreen = false;
+}
+
+function socketOpenError()
+{
+	socketDisconnectShowing = true;
+	document.getElementById('loadingcontent').innerHTML = '<span class="connectError">Could not connect to the server</span><br><br><a href="/"><button>Retry</button></a>';
+	onLoadingScreen = false;
+}
+
+var socketDisconnectShowing = false;
+function socketDisconnect()
+{
+	if(socketDisconnectShowing) { return;}
+	socketDisconnectShowing = true;
+	document.getElementById('loadingscreen').innerHTML = '<div class="overlay" id="loadingcontent"><span class="connectError">Connection to the server was lost</span><br><br><a href="/"><button>Reconnect</button></a></div>';
+	//document.getElementById('loadingscreen').style.opacity = 1;
+	document.getElementById('loadingscreen').style.left = '0%';
+}
+
 function step(timestamp) {
 if(gamestate == 'game')
 {
@@ -104,44 +143,28 @@ function sendTest()
 }
 
 window.onload = function()
-{
-	// Decide on input method
-	console.log(window.DeviceMotionEvent);
-	if (accelerometer_supported)
-	{
-	  input_method = 'accelerometer';
-	  document.getElementById('flickhelp').style.opacity = 0.8;
-	}
-	else
-	{
-	  input_method = 'swipe';
-	  document.getElementById('swipehelp').style.opacity = 0.8;
-	}
-	
+{	
 	// Connect to the socket
+	document.getElementById('loadingcontent').innerHTML = 'Connecting to the server at '+webSocket.socketURL+'...';
 	webSocket.init();
-
-	document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
-
-	c = document.getElementById("drawCanvas");
-	ctx = c.getContext("2d");
 }
 
 function choose_side(side)
 {
-if(side == 'right')
-{
+	if(side == 'right')
+	{
+		document.getElementById('loadingscreen').style.left = '-100%';
+	}
+	else
+	{
+	  // left side chosen
+	  document.getElementById('loadingscreen').style.left = '100%';
+	}
+	gamestate = 'game';
+	window.requestAnimationFrame(step);
 
-}
-else
-{
-  // left side chosen
-}
-gamestate = 'game';
-window.requestAnimationFrame(step);
-
-document.getElementById('loadingscreen').style.opacity = 0;
-setTimeout("var el = document.getElementById('loadingscreen'); el.parentNode.removeChild(el);",2000);
+	//document.getElementById('loadingscreen').style.opacity = 0;
+	//setTimeout("var el = document.getElementById('loadingscreen'); el.parentNode.removeChild(el);",2000);
 }
 
 var a = false;

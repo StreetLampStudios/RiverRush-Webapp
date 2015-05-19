@@ -56,6 +56,12 @@ top: 50%;
 transform: translateY(-50%);
 }
 
+.connectError
+{
+	color: red;
+	text-shadow: 1px 1px 5px pink;
+}
+
 .upanimatecontainer
 {
 border: none;
@@ -97,6 +103,12 @@ animation-iteration-count: infinite;
 {
 background-color: black;
 color: white;
+
+-webkit-transition: opacity .30s ease-in-out, left .50s ease-in-out;
+  -moz-transition: opacity .30s ease-in-out, left .50s ease-in-out;
+  -ms-transition: opacity .30s ease-in-out, left .50s ease-in-out;
+  -o-transition: opacity .30s ease-in-out, left .50s ease-in-out;
+  transition: opacity .30s ease-in-out, left .50s ease-in-out;
 }
 
 #loadingcontent
@@ -130,4 +142,13 @@ border: 2px solid red;
 .choosesidetitle
 {
 
+}
+
+.allcontainer
+{
+	position: relative;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	overflow-x: hidden;
 }
