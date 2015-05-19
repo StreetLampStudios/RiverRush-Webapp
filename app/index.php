@@ -9,6 +9,9 @@
   </head>
   <body>
     <div style='background-color: white;' id='container'>
+	  <div id='lookAtMonitor' style='opacity: 0;'><div class='inAnAbsoluteDiv'>
+	  <div class='centeredVertically'><img src='./assets/images/up_arrow.png' style='vertical-align:middle'> <span>Look at the monitor to time your jumps</span></div>
+	  </div></div>
 	  <div class='normalBackground'>
 		<div class='airBackground'></div>
 		<div class='waterBackground'></div>

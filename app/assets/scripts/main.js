@@ -43,6 +43,7 @@ function turnOffOverlay()
 	  {
 		document.getElementById('swipehelp').style.opacity = 0;
 	  }
+	  document.getElementById('lookAtMonitor').style.opacity = 1;
 	}
 }
 
@@ -175,7 +176,7 @@ function stepgame(timestamp) {
 	ctx.fillRect(100,340-80,200,80);
 	
 	ctx.fillStyle = '#3737ff';
-	ctx.fillRect(0,340,400,60);
+	ctx.fillRect(0,340,400,80);
 	
 	ctx.fillStyle = wavePattern;
 	var offset_x = - wave_x;

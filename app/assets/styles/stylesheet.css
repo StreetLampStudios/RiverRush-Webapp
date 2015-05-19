@@ -144,6 +144,47 @@ color: white;
   transition: opacity .30s ease-in-out, left .50s ease-in-out;
 }
 
+#lookAtMonitor
+{
+	-webkit-transition: opacity 1s ease-in-out;
+	-moz-transition: opacity 1s ease-in-out;
+	-ms-transition: opacity 1s ease-in-out;
+	-o-transition: opacity 1s ease-in-out;
+	transition: opacity 1s ease-in-out;
+	position: absolute;
+	z-index: 2;
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 30%;
+	text-align: center;
+	text-shadow: 1px 1px 5px #CDCDCD;
+	color: white;
+	font-weight: bold;
+	
+	background: -moz-linear-gradient(top,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=0 ); /* IE6-9 */
+}
+
+.inAnAbsoluteDiv
+{
+	position: relative;
+	width: 100%;
+	height: 100%;
+}
+.centeredVertically
+{
+	top: 50%;
+	transform: translateY(-50%);
+	position: relative;
+	display: block;
+}
+
 #loadingcontent
 {
 font-size: 16pt;
