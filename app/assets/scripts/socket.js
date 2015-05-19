@@ -6,11 +6,8 @@ var webSocket =
 	var displayFunction;
 	var webSocket = {
 		socketURL: serverTXTContent,
-		output: null,
 		init: function()
 		{
-			output = document.getElementById("output");
-			this.writeToScreen("WebSocket log:");
 			this.launchWebSocket();
 		},
 		launchWebSocket: function()
@@ -21,8 +18,8 @@ var webSocket =
 			socket.onmessage = function(evt) { webSocket.onMessage(evt) };
 			socket.onerror = function(evt) { webSocket.onError(evt) };
 		} ,
-		onOpen: function(evt) { connection = true; if(onLoadingScreen) { socketOpened(); } this.writeToScreen("CONNECTED"); },
-		onClose: function(evt) { connection = false; socketDisconnect(); this.writeToScreen("DISCONNECTED"); },
+		onOpen: function(evt) { connection = true; if(onLoadingScreen) { socketOpened(); } console.log("CONNECTED"); },
+		onClose: function(evt) { connection = false; socketDisconnect(); console.log("DISCONNECTED"); },
 		sendTest: function()
 		{
 			this.doSend(window.prompt("Send what?"));
@@ -33,7 +30,11 @@ var webSocket =
 		},
 		onMessage: function(evt)
 		{
-			this.writeToScreen('<span style="color: blue;">RESPONSE: ' + evt.data+'</span>');
+			if(evt.data == 'fall')
+			{
+				doFall = true;
+			}
+			console.log('RESPONSE: ' + evt.data);
 		},
 		onError: function(evt)
 		{
@@ -44,20 +45,13 @@ var webSocket =
 				errormsg = 'Could not connect to the server at '+this.socketURL;
 			}
 			if(onLoadingScreen) { socketOpenError(); } else { socketDisconnect(); }
-			this.writeToScreen('<span style="color: red;">ERROR:</span> ' + errormsg);
+			console.log('CONNECTION ERROR: ' + errormsg);
 		},
 		doSend: function(message)
 		{
 			if(!connection) { return; } // Only send something when a connection is open
-			this.writeToScreen("SENT: " + message);
+			console.log("SENT: " + message);
 			socket.send(message);
-		},
-		writeToScreen: function(message)
-		{
-			var pre = document.createElement("p");
-			pre.style.wordWrap = "break-word";
-			pre.innerHTML = message;
-			output.appendChild(pre);
 		},
 	};
 	return webSocket;

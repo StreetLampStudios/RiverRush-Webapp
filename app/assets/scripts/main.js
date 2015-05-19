@@ -20,29 +20,33 @@ checkFlick();
 }
 
 
-monkeyY = 0;
-monkeyYspeed = 0;
+var monkeyY = 0;
+var monkeyYspeed = 0;
 
-monkeyJump = 0;
+var monkeyJump = 0;
+var monkeyFall = 0;
+var monkeyDisplayFall = 0;
 
 var overlayvisible = true;
 var gamestate = 'loading';
 
 function turnOffOverlay()
 {
-if(overlayvisible)
-{
-  overlayvisible = false;
-  if(input_method == 'accelerometer')
-  {
-	document.getElementById('flickhelp').style.opacity = 0;
-  }
-  else
-  {
-	document.getElementById('swipehelp').style.opacity = 0;
-  }
+	if(overlayvisible)
+	{
+	  overlayvisible = false;
+	  if(input_method == 'accelerometer')
+	  {
+		document.getElementById('flickhelp').style.opacity = 0;
+	  }
+	  else
+	  {
+		document.getElementById('swipehelp').style.opacity = 0;
+	  }
+	}
 }
-}
+
+
 
 function jump(timestamp)
 {
@@ -50,6 +54,12 @@ function jump(timestamp)
 	monkeyJump = timestamp;
 	// Send jump signal here
 	webSocket.sendJumpEvent();
+}
+
+function fall(timestamp)
+{
+	monkeyFall = timestamp;
+	monkeyDisplayFall = Math.max(monkeyFall, monkeyJump + 1000);
 }
 
 var onLoadingScreen = true;
@@ -71,6 +81,8 @@ function socketOpened()
 	document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
 	c = document.getElementById("drawCanvas");
 	ctx = c.getContext("2d");
+	
+	wavePattern = createPattern(waveImage);
 	onLoadingScreen = false;
 }
 
@@ -91,43 +103,95 @@ function socketDisconnect()
 	document.getElementById('loadingscreen').style.left = '0%';
 }
 
-function step(timestamp) {
-if(gamestate == 'game')
+function step(timestamp)
 {
-  stepgame(timestamp);
+	if(gamestate == 'game')
+	{
+	  stepgame(timestamp);
+	}
+	window.requestAnimationFrame(step);
 }
-window.requestAnimationFrame(step);
-}
+
+
+var doFall = false;
 
 function stepgame(timestamp) {
 
-ctx.fillStyle = "#FFFF00";
-ctx.fillRect(0,0,200,200);
+	ctx.fillStyle = "#FFFFFF";
+	ctx.fillRect(0,0,400,400);
 
-var monkeyY = 0;
+	var monkeyY = 0;
 
-if(monkeyJump == 0 && isFlicking())
-{
-  // Jump
-  jump(timestamp);
+	if(doFall)
+	{
+		doFall = false;
+		// Fall
+		fall(timestamp);
+	}
+	if(monkeyJump == 0 && isFlicking() && monkeyFall == 0)
+	{
+	  // Jump
+	  jump(timestamp);
+	}
+	if(monkeyJump != 0)
+	{
+	  if(monkeyJump < timestamp - 1000)
+	  {
+		monkeyJump = 0;
+	  }
+	  else
+	  {
+		// Jump the monkey
+		var x = monkeyJump + 1000 - timestamp;
+		monkeyY = -(3/5000)*Math.pow(x - 500, 2) + 150;
+	  }
+	}
+	if(monkeyDisplayFall < timestamp && monkeyFall != 0)
+	{
+		if(timestamp - monkeyDisplayFall < 500)
+		{
+			monkeyY = -(timestamp - monkeyDisplayFall) / 500 * 80;
+		}
+		else if(timestamp - monkeyDisplayFall >= 500 && monkeyFall + 5000 > timestamp)
+		{
+			monkeyY = -80;
+		}
+		else if(monkeyFall + 5500 < timestamp)
+		{
+			monkeyFall = 0;
+			monkeyDisplayFall = 0;
+		}
+		else if(monkeyFall + 5000 < timestamp)
+		{
+			monkeyY = -80 + (timestamp - (monkeyFall + 5000)) / 500 * 80;
+		}
+	}
+	upFlick = false;
+
+	calculateWaveSpot(timestamp);
+	
+	ctx.fillStyle = 'brown';
+	ctx.drawImage(monkeyImage['normal'],160,340 - 80 - 80 + 10 - monkeyY,80,80);
+	ctx.fillRect(100,340-80,200,80);
+	
+	ctx.fillStyle = '#3737ff';
+	ctx.fillRect(0,340,400,60);
+	
+	ctx.fillStyle = wavePattern;
+	var offset_x = - wave_x;
+	var offset_y = 340 - 60 - wave_y;
+	ctx.translate(offset_x, offset_y);
+	ctx.fillRect(0,0,480,80);
+	ctx.translate(-offset_x, -offset_y);
 }
-if(monkeyJump != 0)
+
+var wave_x = 0;
+var wave_y = 0;
+
+function calculateWaveSpot(timestamp)
 {
-  if(monkeyJump < timestamp - 1000)
-  {
-	monkeyJump = 0;
-  }
-  else
-  {
-	// Jump the monkey
-	var x = monkeyJump + 1000 - timestamp;
-	monkeyY = -(3/5000)*Math.pow(x - 500, 2) + 150;
-  }
-}
-upFlick = false;
-
-ctx.drawImage(monkeyImage['normal'],75,150 - monkeyY,50,50);
-
+	wave_x = (timestamp % 300) / 300 * 80;
+	wave_y = Math.sin((timestamp % 5000) / 5000 * 2 * Math.PI) * 14;
 }
 
 var c;
@@ -136,6 +200,23 @@ var ctx;
 var monkeyImage = [];
 monkeyImage['normal'] = new Image();
 monkeyImage['normal'].src = './assets/images/monkey_normal.png';
+
+var waveImage = new Image();
+waveImage.src = './assets/images/wave.png';
+
+var wavePattern;
+	
+function createPattern(image)
+{
+	var patternSize = image.width;
+	var patternCanvas = document.createElement('canvas');
+	patternCanvas.width = image.width;
+	patternCanvas.height = image.height;
+	var patternCtx = patternCanvas.getContext("2d");
+	patternCtx.drawImage(image, 0, 0, patternSize, patternSize);
+	
+	return ctx.createPattern(patternCanvas, 'repeat-x');
+}
 
 function sendTest()
 {
@@ -162,9 +243,6 @@ function choose_side(side)
 	}
 	gamestate = 'game';
 	window.requestAnimationFrame(step);
-
-	//document.getElementById('loadingscreen').style.opacity = 0;
-	//setTimeout("var el = document.getElementById('loadingscreen'); el.parentNode.removeChild(el);",2000);
 }
 
 var a = false;
@@ -177,17 +255,16 @@ return ((z > 8 || y < -8) && input_method == 'accelerometer') || (upFlick && inp
 
 function checkFlick()
 {
-document.getElementById('debuginfo').innerHTML = 'Acceleration X: '+Math.round(accelerationX - xOffset)+'<br>Acceleration Y:'+Math.round(accelerationY - yOffset)+'<br>Acceleration Z:'+Math.round(accelerationZ - zOffset);
-y = Math.round(accelerationY - yOffset);
-z = Math.round(accelerationZ - zOffset);
-if(isFlicking())
-{
-  document.getElementById('container').style.backgroundColor = 'red';
-}
-else
-{
-  document.getElementById('container').style.background = 'white';
-}
+	y = Math.round(accelerationY - yOffset);
+	z = Math.round(accelerationZ - zOffset);
+	if(isFlicking())
+	{
+	  document.getElementById('container').style.backgroundColor = 'red';
+	}
+	else
+	{
+	  document.getElementById('container').style.background = 'white';
+	}
 }
 
 document.addEventListener('touchstart', handleTouchStart, false);

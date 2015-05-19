@@ -9,13 +9,14 @@
   </head>
   <body>
     <div style='background-color: white;' id='container'>
-      Flick up<br>
-      <span id='debuginfo'>No accelerometer detected</span>
-      <br>
-      <canvas id='drawCanvas' width="200" height="200"></canvas>
-	  <br>
-	  <div id='output'></div><input type='button' value='Send a message to the socket' onClick='sendTest();'>
-    </div>
+	  <div class='normalBackground'>
+		<div class='airBackground'></div>
+		<div class='waterBackground'></div>
+	  </div>
+	  <div class='overBackground'>
+		<canvas id='drawCanvas' width="400" height="400"></canvas>
+	  </div>
+	 </div>
     <div id='swipehelp' style='opacity: 0;' class='overlaycontainer'>
       <div class='overlay'>
       Swipe up to jump
