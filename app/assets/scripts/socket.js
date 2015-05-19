@@ -5,7 +5,7 @@ var webSocket =
 	var connection = false;
 	var displayFunction;
 	var webSocket = {
-		socketURL: "ws://localhost:8080",
+		socketURL: serverTXTContent,
 		output: null,
 		init: function()
 		{
@@ -21,7 +21,7 @@ var webSocket =
 			socket.onmessage = function(evt) { webSocket.onMessage(evt) };
 			socket.onerror = function(evt) { webSocket.onError(evt) };
 		} ,
-		onOpen: function(evt) { connection = true; if(onLoadingScreen) { socketOpened(); } this.writeToScreen("CONNECTED"); alert('connected to the server'); },
+		onOpen: function(evt) { connection = true; if(onLoadingScreen) { socketOpened(); } this.writeToScreen("CONNECTED"); },
 		onClose: function(evt) { connection = false; socketDisconnect(); this.writeToScreen("DISCONNECTED"); },
 		sendTest: function()
 		{
