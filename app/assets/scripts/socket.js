@@ -1,8 +1,4 @@
-var setSocketURL = 'ws://localhost:82';
-if(serverTXTContent)
-{
-	setSocketURL = serverTXTContent;
-}
+var serverTXTContent = 'ws://localhost:82';
 
 var webSocket = 
 (function ()
@@ -11,13 +7,21 @@ var webSocket =
 	var connection = false;
 	var displayFunction;
 	var webSocket = {
-		socketURL: setSocketURL,
+		socketURL: serverTXTContent,
 		init: function()
 		{
 			this.launchWebSocket();
 		},
+		setSocketURL: function()
+		{
+			if(document.getElementById('serverTXTContent'))
+			{
+				serverTXTContent = document.getElementById('serverTXTContent').value;
+			}
+		},
 		launchWebSocket: function()
 		{
+			this.setSocketURL();
 			socket = new WebSocket(this.socketURL);
 			socket.onopen = function(evt) { webSocket.onOpen(evt) };
 			socket.onclose = function(evt) { webSocket.onClose(evt) };
