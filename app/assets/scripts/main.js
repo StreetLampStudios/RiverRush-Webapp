@@ -80,7 +80,7 @@ function socketOpened()
 {
 	// Decide on input method
 	console.log(window.DeviceMotionEvent);
-	if (accelerometer_supported)
+	if (accelerometer_supported == 1)
 	{
 	  input_method = 'accelerometer';
 	  document.getElementById('flickhelp').style.opacity = 0.8;
