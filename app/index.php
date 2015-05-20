@@ -6,6 +6,8 @@
 	<script type="text/javascript" src="./assets/scripts/socket.js"></script>
     <script type="text/javascript" src="./assets/scripts/main.js"></script>
 	<script type="text/javascript" src="./assets/scripts/events.js"></script>
+	<script src="./assets/scripts/touch-emulator.js"></script>
+	<script>TouchEmulator();</script>
   </head>
   <body>
     <div style='background-color: white;' id='container'>
@@ -18,7 +20,7 @@
 		<div class='waterBackground'></div>
 	  </div>
 	  <div class='overBackground'>
-		<canvas id='drawCanvas' width="400" height="400"></canvas>
+		<div class='canvasContainer'><canvas id='drawCanvas' width="400" height="400"></canvas></div>
 	  </div>
 	 </div>
     <div id='swipehelp' style='opacity: 0;' class='overlaycontainer'>

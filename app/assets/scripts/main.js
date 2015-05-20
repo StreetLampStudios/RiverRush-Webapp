@@ -31,6 +31,9 @@ var animalGetUp = 0;
 var overlayvisible = true;
 var gamestate = 'loading';
 
+var w = 0;
+var h = 0;
+
 var servergamestate = 'waitingForState';
 
 function turnOffOverlay()
@@ -128,12 +131,38 @@ function step(timestamp)
 var doFall = false;
 var doGetUp = false;
 
+function checkWindowSize()
+{
+	if(w != window.innerWidth || h != window.innerHeight)
+	{
+		// Resize
+		console.log('Resize detected');
+		w = window.innerWidth;
+		h = window.innerHeight;
+		
+		if(w > h)
+		{
+			// Landscape
+			document.getElementById('drawCanvas').style.width = 'auto';
+			document.getElementById('drawCanvas').style.height = '100%';
+		}
+		else
+		{
+			// Portrait
+			document.getElementById('drawCanvas').style.width = '100%';
+			document.getElementById('drawCanvas').style.height = 'auto';
+		}
+	}
+}
+
 function stepgame(timestamp) {
 
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fillRect(0,0,400,400);
 
 	var animalY = 0;
+	
+	checkWindowSize();
 
 	if(doFall)
 	{
