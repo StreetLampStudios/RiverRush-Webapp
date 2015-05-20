@@ -6,6 +6,7 @@
 	<script>var serverTXTContent = "<?php if(file_exists('server.txt')) { echo htmlentities(file_get_contents('server.txt')); } else { echo '';} ?>";</script>
 	<script type="text/javascript" src="./assets/scripts/socket.js"></script>
     <script type="text/javascript" src="./assets/scripts/main.js"></script>
+	<script type="text/javascript" src="./assets/scripts/events.js"></script>
   </head>
   <body>
     <div style='background-color: white;' id='container'>

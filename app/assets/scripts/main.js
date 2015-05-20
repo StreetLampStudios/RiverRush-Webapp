@@ -79,6 +79,9 @@ function socketOpened()
 	  input_method = 'swipe';
 	  document.getElementById('swipehelp').style.opacity = 0.8;
 	}
+	// Send join event
+	webSocket.sendJoinEvent();
+	
 	document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
 	c = document.getElementById("drawCanvas");
 	ctx = c.getContext("2d");

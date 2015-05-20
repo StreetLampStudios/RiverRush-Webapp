@@ -28,13 +28,48 @@ var webSocket =
 		{
 			this.doSend("event=JumpEvent");
 		},
+		sendJoinEvent: function()
+		{
+			this.doSend("event=JoinEvent");
+		},
 		onMessage: function(evt)
 		{
-			if(evt.data == 'fall')
-			{
-				doFall = true;
-			}
 			console.log('RESPONSE: ' + evt.data);
+			
+			if(evt.data)
+			{
+				var datasplit = evt.data.split('=');
+				if(datasplit.length == 2 && datasplit[0] == 'event')
+				{
+					console.log('EVENT RECEIVED: ' + datasplit[1]);
+					switch(datasplit[1])
+					{
+						case 'GameStartedEvent':
+							GameStartedEvent();
+						break;
+						
+						case 'GameStoppedEvent':
+							GameStoppedEvent();
+						break;
+						
+						case 'GameWaitingEvent':
+							GameWaitingEvent();
+						break;
+						
+						case 'GameFinishedEvent':
+							GameFinishedEvent();
+						break;
+						
+						case 'PlayerJumpedEvent':
+							PlayerJumpedEvent();
+						break;
+						
+						case 'PlayerFellEvent':
+							PlayerFellEvent();
+						break;
+					}
+				}
+			}
 		},
 		onError: function(evt)
 		{
