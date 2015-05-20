@@ -1,7 +1,7 @@
 var setSocketURL = 'ws://localhost:82';
-if(serverTXTContent)
+if(serverTXTContents)
 {
-	setSocketURL = serverTXTContent;
+	setSocketURL = serverTXTContents;
 }
 
 var webSocket = 

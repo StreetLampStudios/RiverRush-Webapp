@@ -3,7 +3,7 @@
     <meta name='viewport' content='width=device-width,user-scalable=no'>
     <title>Web app</title>
     <LINK href="./assets/styles/stylesheet.css" rel="stylesheet" type="text/css">
-	<script>var serverTXTContent = "<?php if(file_exists('server.txt')) { echo htmlentities(file_get_contents('server.txt')); } else { echo '';} ?>";</script>
+	<script>var serverTXTContents = "<?php if(file_exists('server.txt')) { echo htmlentities(file_get_contents('server.txt')); } else { echo '';} ?>";</script>
 	<script type="text/javascript" src="./assets/scripts/socket.js"></script>
     <script type="text/javascript" src="./assets/scripts/main.js"></script>
 	<script type="text/javascript" src="./assets/scripts/events.js"></script>
