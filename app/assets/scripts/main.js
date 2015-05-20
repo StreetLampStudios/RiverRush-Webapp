@@ -30,6 +30,8 @@ var monkeyDisplayFall = 0;
 var overlayvisible = true;
 var gamestate = 'loading';
 
+var servergamestate = 'waitingForState';
+
 function turnOffOverlay()
 {
 	if(overlayvisible)

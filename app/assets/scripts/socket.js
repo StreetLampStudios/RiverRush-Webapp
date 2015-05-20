@@ -1,3 +1,8 @@
+if(!serverTXTContent)
+{
+	serverTXTContext = '';
+}
+
 var webSocket = 
 (function ()
 {
