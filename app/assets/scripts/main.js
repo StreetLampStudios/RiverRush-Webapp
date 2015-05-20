@@ -20,13 +20,13 @@ checkFlick();
 }
 
 
-var monkeyY = 0;
-var monkeyYspeed = 0;
+var animalY = 0;
+var animalYspeed = 0;
 
-var monkeyJump = 0;
-var monkeyFall = 0;
-var monkeyDisplayFall = 0;
-var monkeyGetUp = 0;
+var animalJump = 0;
+var animalFall = 0;
+var animalDisplayFall = 0;
+var animalGetUp = 0;
 
 var overlayvisible = true;
 var gamestate = 'loading';
@@ -55,20 +55,20 @@ function turnOffOverlay()
 function jump(timestamp)
 {
 	turnOffOverlay();
-	monkeyJump = timestamp;
+	animalJump = timestamp;
 	// Send jump signal here
 	webSocket.sendJumpEvent();
 }
 
 function fall(timestamp)
 {
-	monkeyFall = timestamp;
-	monkeyDisplayFall = Math.max(monkeyFall, monkeyJump + 1000);
+	animalFall = timestamp;
+	animalDisplayFall = Math.max(animalFall, animalJump + 1000);
 }
 
 function getUp(timestamp)
 {
-	monkeyGetUp = timestamp;
+	animalGetUp = timestamp;
 }
 
 var onLoadingScreen = true;
@@ -133,7 +133,7 @@ function stepgame(timestamp) {
 	ctx.fillStyle = "#FFFFFF";
 	ctx.fillRect(0,0,400,400);
 
-	var monkeyY = 0;
+	var animalY = 0;
 
 	if(doFall)
 	{
@@ -147,43 +147,43 @@ function stepgame(timestamp) {
 		// Fall
 		getUp(timestamp);
 	}
-	if(monkeyJump == 0 && isFlicking() && monkeyFall == 0)
+	if(animalJump == 0 && isFlicking() && animalFall == 0)
 	{
 	  // Jump
 	  jump(timestamp);
 	}
-	if(monkeyJump != 0)
+	if(animalJump != 0)
 	{
-	  if(monkeyJump < timestamp - 1000)
+	  if(animalJump < timestamp - 1000)
 	  {
-		monkeyJump = 0;
+		animalJump = 0;
 	  }
 	  else
 	  {
-		// Jump the monkey
-		var x = monkeyJump + 1000 - timestamp;
-		monkeyY = -(3/5000)*Math.pow(x - 500, 2) + 150;
+		// Jump the animal
+		var x = animalJump + 1000 - timestamp;
+		animalY = -(3/5000)*Math.pow(x - 500, 2) + 150;
 	  }
 	}
-	if(monkeyDisplayFall < timestamp && monkeyFall != 0)
+	if(animalDisplayFall < timestamp && animalFall != 0)
 	{
-		if(timestamp - monkeyDisplayFall < 500)
+		if(timestamp - animalDisplayFall < 500)
 		{
-			monkeyY = -(timestamp - monkeyDisplayFall) / 500 * 80;
+			animalY = -(timestamp - animalDisplayFall) / 500 * 80;
 		}
-		else if(timestamp - monkeyDisplayFall >= 500 && monkeyGetUp == 0)
+		else if(timestamp - animalDisplayFall >= 500 && animalGetUp == 0)
 		{
-			monkeyY = -80;
+			animalY = -80;
 		}
-		else if(monkeyGetUp != 0 && monkeyGetUp + 500 < timestamp)
+		else if(animalGetUp != 0 && animalGetUp + 500 < timestamp)
 		{
-			monkeyFall = 0;
-			monkeyDisplayFall = 0;
-			monkeyGetUp = 0;
+			animalFall = 0;
+			animalDisplayFall = 0;
+			animalGetUp = 0;
 		}
-		else if(monkeyGetUp != 0)
+		else if(animalGetUp != 0)
 		{
-			monkeyY = -80 + (timestamp - monkeyGetUp) / 500 * 80;
+			animalY = -80 + (timestamp - animalGetUp) / 500 * 80;
 		}
 	}
 	upFlick = false;
@@ -191,7 +191,7 @@ function stepgame(timestamp) {
 	calculateWaveSpot(timestamp);
 	
 	ctx.fillStyle = 'brown';
-	ctx.drawImage(monkeyImage['normal'],160,340 - 80 - 80 + 10 - monkeyY,80,80);
+	ctx.drawImage(animalImage['normal'],160,340 - 80 - 80 + 10 - animalY,80,80);
 	ctx.fillRect(100,340-80,200,80);
 	
 	ctx.fillStyle = '#3737ff';
@@ -217,9 +217,9 @@ function calculateWaveSpot(timestamp)
 var c;
 var ctx;
 
-var monkeyImage = [];
-monkeyImage['normal'] = new Image();
-monkeyImage['normal'].src = './assets/images/monkey_normal.png';
+var animalImage = [];
+animalImage['normal'] = new Image();
+animalImage['normal'].src = './assets/images/monkey_normal.png';
 
 var waveImage = new Image();
 waveImage.src = './assets/images/wave.png';
