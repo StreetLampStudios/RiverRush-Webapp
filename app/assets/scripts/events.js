@@ -27,3 +27,8 @@ function PlayerFellEvent()
 {
 	doFall = true;
 }
+
+function PlayerGetUpEvent()
+{
+	doGetUp = true;
+}

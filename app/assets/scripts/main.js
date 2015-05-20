@@ -26,6 +26,7 @@ var monkeyYspeed = 0;
 var monkeyJump = 0;
 var monkeyFall = 0;
 var monkeyDisplayFall = 0;
+var monkeyGetUp = 0;
 
 var overlayvisible = true;
 var gamestate = 'loading';
@@ -63,6 +64,11 @@ function fall(timestamp)
 {
 	monkeyFall = timestamp;
 	monkeyDisplayFall = Math.max(monkeyFall, monkeyJump + 1000);
+}
+
+function getUp(timestamp)
+{
+	monkeyGetUp = timestamp;
 }
 
 var onLoadingScreen = true;
@@ -120,6 +126,7 @@ function step(timestamp)
 
 
 var doFall = false;
+var doGetUp = false;
 
 function stepgame(timestamp) {
 
@@ -133,6 +140,12 @@ function stepgame(timestamp) {
 		doFall = false;
 		// Fall
 		fall(timestamp);
+	}
+	if(doGetUp)
+	{
+		doGetUp = false;
+		// Fall
+		getUp(timestamp);
 	}
 	if(monkeyJump == 0 && isFlicking() && monkeyFall == 0)
 	{
@@ -158,18 +171,19 @@ function stepgame(timestamp) {
 		{
 			monkeyY = -(timestamp - monkeyDisplayFall) / 500 * 80;
 		}
-		else if(timestamp - monkeyDisplayFall >= 500 && monkeyFall + 5000 > timestamp)
+		else if(timestamp - monkeyDisplayFall >= 500 && monkeyGetUp == 0)
 		{
 			monkeyY = -80;
 		}
-		else if(monkeyFall + 5500 < timestamp)
+		else if(monkeyGetUp != 0 && monkeyGetUp + 500 < timestamp)
 		{
 			monkeyFall = 0;
 			monkeyDisplayFall = 0;
+			monkeyGetUp = 0;
 		}
-		else if(monkeyFall + 5000 < timestamp)
+		else if(monkeyGetUp != 0)
 		{
-			monkeyY = -80 + (timestamp - (monkeyFall + 5000)) / 500 * 80;
+			monkeyY = -80 + (timestamp - monkeyGetUp) / 500 * 80;
 		}
 	}
 	upFlick = false;
