@@ -246,8 +246,8 @@ function sendTest()
 window.onload = function()
 {	
 	// Connect to the socket
-	document.getElementById('loadingcontent').innerHTML = 'Connecting to the server at '+webSocket.socketURL+'...';
 	webSocket.init();
+	document.getElementById('loadingcontent').innerHTML = 'Connecting to the server at '+webSocket.socketURL+'...';
 }
 
 function choose_side(side)

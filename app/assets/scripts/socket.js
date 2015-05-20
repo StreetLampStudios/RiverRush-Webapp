@@ -17,6 +17,7 @@ var webSocket =
 			if(document.getElementById('serverTXTContent'))
 			{
 				serverTXTContent = document.getElementById('serverTXTContent').value;
+				this.socketURL = serverTXTContent;
 			}
 		},
 		launchWebSocket: function()
