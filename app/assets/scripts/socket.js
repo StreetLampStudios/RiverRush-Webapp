@@ -1,6 +1,7 @@
-if(!serverTXTContent)
+var setSocketURL = 'ws://localhost:82';
+if(serverTXTContent)
 {
-	serverTXTContext = '';
+	setSocketURL = serverTXTContext;
 }
 
 var webSocket = 
@@ -10,7 +11,7 @@ var webSocket =
 	var connection = false;
 	var displayFunction;
 	var webSocket = {
-		socketURL: serverTXTContent,
+		socketURL: setSocketURL,
 		init: function()
 		{
 			this.launchWebSocket();
