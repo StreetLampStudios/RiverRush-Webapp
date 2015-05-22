@@ -1,34 +1,27 @@
-function GameStartedEvent()
-{
+function GameStartedEvent() {
 
 }
 
-function GameStoppedEvent()
-{
+function GameStoppedEvent() {
 
 }
 
-function GameWaitingEvent()
-{
+function GameWaitingEvent() {
 
 }
 
-function GameFinishedEvent()
-{
+function GameFinishedEvent() {
 
 }
 
-function PlayerJumpedEvent()
-{
+function PlayerJumpedEvent() {
 
 }
 
-function PlayerFellEvent()
-{
-	doFall = true;
+function PlayerFellEvent() {
+  doFall = true;
 }
 
-function PlayerGetUpEvent()
-{
-	doGetUp = true;
+function PlayerGetUpEvent() {
+  doGetUp = true;
 }
