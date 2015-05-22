@@ -1,133 +1,243 @@
-body
-{
-padding: 0px;
-margin: 0px;
-font-family: Arial, Helvetica, sans-serif;
+body {
+  padding: 0px;
+  margin: 0px;
+  font-family: Arial, Helvetica, sans-serif;
 }
-#container
-{
-padding: 10px;
-text-align: center;
-}
-#calibrator
-{
-height: 100%;
-width: 100%;
-text-align: center;
-z-index: 1;
-position: absolute;
-top: 0px;
-left: 0px;
-background-color: #DCDCDC;
-padding: 10px;
-}
-#drawCanvas
-{
-width: 200px;
-height: 200px;
-border: 1px solid black;
-background-color: white;
-}
-.overlaycontainer
-{
-position: absolute;
-top: 0px;
-left: 0px;
-background-color: gray;
-width: 100%;
-height: 100%;
-z-index: 1;
-font-weight: bold;
 
--webkit-transition: opacity .30s ease-in-out;
+#container {
+  text-align: center;
+}
+
+#calibrator {
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  z-index: 2;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: #DCDCDC;
+  padding: 10px;
+}
+
+.canvasContainer {
+  width: 100%;
+  background-color: black;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+  position: relative;
+}
+
+#drawCanvas {
+
+}
+
+.overlaycontainer {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  background-color: gray;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  font-weight: bold;
+
+  -webkit-transition: opacity .30s ease-in-out;
   -moz-transition: opacity .30s ease-in-out;
   -ms-transition: opacity .30s ease-in-out;
   -o-transition: opacity .30s ease-in-out;
   transition: opacity .30s ease-in-out;
 }
-.overlay
-{
-margin: 5px;
-text-align: center;
-color: black;
-text-shadow: 1px 1px 5px white;
-position: relative;
-top: 50%;
-transform: translateY(-50%);
+
+.overlay {
+  margin: 5px;
+  text-align: center;
+  color: black;
+  text-shadow: 1px 1px 5px white;
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
-.upanimatecontainer
-{
-border: none;
-height: 50%;
+.backgroundContainer {
+  width: 100%;
+  height: 100%;
+  background-color: pink;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  z-index: 0;
 }
 
-.upanimateimage
-{
-position: relative;
-border: none;
-height: 50%;
-top: 50%;
-opacity: 0;
-animation-name: example;
+.airBackground {
+  background-color: white;
+  width: 100%;
+  height: 50%;
+}
+
+.waterBackground {
+  background-color: #3737ff;
+  width: 100%;
+  height: 50%;
+}
+
+.overBackground {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+}
+
+.connectError {
+  color: red;
+  text-shadow: 1px 1px 5px pink;
+}
+
+.upanimatecontainer {
+  border: none;
+  height: 50%;
+}
+
+.upanimateimage {
+  position: relative;
+  border: none;
+  height: 50%;
+  top: 50%;
+  opacity: 0;
+  animation-name: example;
   animation-duration: 4s;
-animation-iteration-count: infinite;
--webkit-animation-name: example; /* Chrome, Safari, Opera */
+  animation-iteration-count: infinite;
+  -webkit-animation-name: example; /* Chrome, Safari, Opera */
   -webkit-animation-duration: 4s; /* Chrome, Safari, Opera */
--webkit-animation-iteration-count: infinite;
+  -webkit-animation-iteration-count: infinite;
 }
 
 /* The animation code */
 @keyframes example {
-  0%   {top: 50%; opacity: 0;}
-  25%  {top: 50%; opacity: 1;}
-  50%  {top: 0%; opacity: 1;}
-  100% {top: 0%; opacity: 0;}
+  0% {
+    top: 50%;
+    opacity: 0;
+  }
+  25% {
+    top: 50%;
+    opacity: 1;
+  }
+  50% {
+    top: 0%;
+    opacity: 1;
+  }
+  100% {
+    top: 0%;
+    opacity: 0;
+  }
 }
 
 /* Chrome, Safari, Opera */
 @-webkit-keyframes example {
-  0%   {top: 50%; opacity: 0;}
-  25%  {top: 50%; opacity: 1;}
-  50%  {top: 0%; opacity: 1;}
-  100% {top: 0%; opacity: 0;}
+  0% {
+    top: 50%;
+    opacity: 0;
+  }
+  25% {
+    top: 50%;
+    opacity: 1;
+  }
+  50% {
+    top: 0%;
+    opacity: 1;
+  }
+  100% {
+    top: 0%;
+    opacity: 0;
+  }
 }
 
-#loadingscreen
-{
-background-color: black;
-color: white;
+#loadingscreen {
+  background-color: black;
+  color: white;
+
+  -webkit-transition: opacity .30s ease-in-out, left .50s ease-in-out;
+  -moz-transition: opacity .30s ease-in-out, left .50s ease-in-out;
+  -ms-transition: opacity .30s ease-in-out, left .50s ease-in-out;
+  -o-transition: opacity .30s ease-in-out, left .50s ease-in-out;
+  transition: opacity .30s ease-in-out, left .50s ease-in-out;
 }
 
-#loadingcontent
-{
-font-size: 16pt;
-color: white;
-}
-.choosesidebutton
-{
-padding: 5px;
-font-size: 20pt;
-color: black;
-font-weight: bold;
-width: 40%;
-border-radius: 5px;
--webkit-border-radius: 5px;
-}
+#lookAtMonitor {
+  -webkit-transition: opacity 1s ease-in-out;
+  -moz-transition: opacity 1s ease-in-out;
+  -ms-transition: opacity 1s ease-in-out;
+  -o-transition: opacity 1s ease-in-out;
+  transition: opacity 1s ease-in-out;
+  position: absolute;
+  z-index: 2;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 30%;
+  text-align: center;
+  text-shadow: 1px 1px 5px #CDCDCD;
+  color: white;
+  font-weight: bold;
 
-#sideleftbutton
-{
-background-color: lime;
-border: 2px solid green;
-}
-
-#siderightbutton
-{
-background-color: pink;
-border: 2px solid red;
+  background: -moz-linear-gradient(top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(0, 0, 0, 0.65)), color-stop(100%, rgba(0, 0, 0, 0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%); /* IE10+ */
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#a6000000', endColorstr='#00000000', GradientType=0); /* IE6-9 */
 }
 
-.choosesidetitle
-{
+.inAnAbsoluteDiv {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
 
+.centeredVertically {
+  top: 50%;
+  transform: translateY(-50%);
+  position: relative;
+  display: block;
+}
+
+#loadingcontent {
+  font-size: 16pt;
+  color: white;
+}
+
+.choosesidebutton {
+  padding: 5px;
+  font-size: 20pt;
+  color: black;
+  font-weight: bold;
+  width: 40%;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+}
+
+#sideleftbutton {
+  background-color: lime;
+  border: 2px solid green;
+}
+
+#siderightbutton {
+  background-color: pink;
+  border: 2px solid red;
+}
+
+.choosesidetitle {
+
+}
+
+.allcontainer {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  overflow-x: hidden;
 }
