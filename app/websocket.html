@@ -2,8 +2,8 @@
 <meta charset="utf-8" />
 <title>WebSocket Test</title>
 <script language="javascript" type="text/javascript">
-var wsUri = "ws://localhost:8083";
-var output; 
+var wsUri = "ws://localhost:41337";
+var output;
 function init()
 {
 output = document.getElementById("output");
@@ -15,8 +15,8 @@ websocket = new WebSocket(wsUri);
 websocket.onopen = function(evt) { onOpen(evt) };
 websocket.onclose = function(evt) { onClose(evt) };
 websocket.onmessage = function(evt) { onMessage(evt) };
-websocket.onerror = function(evt) { onError(evt) }; } 
-function onOpen(evt) { writeToScreen("CONNECTED"); doSend("event=JoinEvent"); } 
+websocket.onerror = function(evt) { onError(evt) }; }
+function onOpen(evt) { writeToScreen("CONNECTED"); doSend("event=JoinEvent"); }
 function onClose(evt) { writeToScreen("DISCONNECTED"); }
 function onMessage(evt)
 {
@@ -27,7 +27,7 @@ websocket.close();
 function onError(evt)
 {
 writeToScreen('<span style="color: red;">ERROR:</span> ' + evt.data);
-} 
+}
 function doSend(message)
 {
 writeToScreen("SENT: " + message);

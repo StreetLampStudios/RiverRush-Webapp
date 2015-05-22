@@ -5,7 +5,7 @@ if($_POST['password'] != $password)
 	quit('1');
 }
 $ip = $_SERVER['REMOTE_ADDR'];
-$port = 8080;
+$port = 41337;
 if(round($_POST['port']) != 0)
 {
 	$port = round($_POST['port']);
