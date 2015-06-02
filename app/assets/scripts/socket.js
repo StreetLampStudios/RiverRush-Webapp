@@ -48,10 +48,9 @@ var webSocket =
         this.doSend(window.prompt("Send what?"));
       },
       sendJumpEvent: function () {
-        this.doSend("event=JumpEvent");
+        this.doSend("event=JumpCommand");
       },
       sendJoinEvent: function () {
-        this.doSend("event=JoinEvent");
       },
       onMessage: function (evt) {
         console.log('RESPONSE: ' + evt.data);
