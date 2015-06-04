@@ -50,7 +50,8 @@ var webSocket =
       sendJumpEvent: function () {
         this.doSend("event=JumpCommand");
       },
-      sendJoinEvent: function () {
+      sendJoinEvent: function (team) {
+		this.doSend("event=JoinTeamCommand;team="+team);
       },
       onMessage: function (evt) {
         console.log('RESPONSE: ' + evt.data);
