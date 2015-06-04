@@ -54,6 +54,7 @@ function jump(timestamp) {
   animalJump = timestamp;
   // Send jump signal here
   webSocket.sendJumpEvent();
+  gotDroppedEvent = false;
 }
 
 function fall(timestamp) {
@@ -114,6 +115,7 @@ function step(timestamp) {
 
 var doFall = false;
 var doGetUp = false;
+var gotDroppedEvent = true;
 
 function checkWindowSize() {
   if (w != window.innerWidth || h != window.innerHeight) {
@@ -154,7 +156,7 @@ function stepgame(timestamp) {
     // Fall
     getUp(timestamp);
   }
-  if (animalJump == 0 && isFlicking() && animalFall == 0) {
+  if (animalJump == 0 && isFlicking() && animalFall == 0 && gotDroppedEvent) {
     // Jump
     jump(timestamp);
   }
