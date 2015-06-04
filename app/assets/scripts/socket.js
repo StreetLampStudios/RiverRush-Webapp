@@ -77,12 +77,16 @@ var webSocket =
                 GameFinishedEvent();
                 break;
 
-              case 'PlayerJumpedEvent':
-                PlayerJumpedEvent();
+              case 'AnimalJumpedEvent':
+                AnimalJumpedEvent();
                 break;
 
               case 'PlayerFellEvent':
                 PlayerFellEvent();
+                break;
+				
+			  case 'AnimalDroppedEvent':
+                PlayerDroppedEvent();
                 break;
             }
           }
