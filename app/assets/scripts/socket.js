@@ -57,39 +57,43 @@ var webSocket =
         console.log('RESPONSE: ' + evt.data);
 
         if (evt.data) {
-          var datasplit = evt.data.split('=');
-          if (datasplit.length == 2 && datasplit[0] == 'event') {
-            console.log('EVENT RECEIVED: ' + datasplit[1]);
-            switch (datasplit[1]) {
-              case 'GameStartedEvent':
-                GameStartedEvent();
-                break;
+			var updatasplit = evt.data.split(';');
+			for(var i = 0; i < updatasplit.length; i++)
+			{
+				var datasplit = updatasplit[i].split('=');
+				if (datasplit.length == 2 && datasplit[0] == 'event') {
+					console.log('EVENT RECEIVED: ' + datasplit[1]);
+					switch (datasplit[1]) {
+					  case 'GameStartedEvent':
+						GameStartedEvent();
+						break;
 
-              case 'GameStoppedEvent':
-                GameStoppedEvent();
-                break;
+					  case 'GameStoppedEvent':
+						GameStoppedEvent();
+						break;
 
-              case 'GameWaitingEvent':
-                GameWaitingEvent();
-                break;
+					  case 'GameWaitingEvent':
+						GameWaitingEvent();
+						break;
 
-              case 'GameFinishedEvent':
-                GameFinishedEvent();
-                break;
+					  case 'GameFinishedEvent':
+						GameFinishedEvent();
+						break;
 
-              case 'AnimalJumpedEvent':
-                AnimalJumpedEvent();
-                break;
+					  case 'AnimalJumpedEvent':
+						AnimalJumpedEvent();
+						break;
 
-              case 'PlayerFellEvent':
-                PlayerFellEvent();
-                break;
-				
-			  case 'AnimalDroppedEvent':
-                PlayerDroppedEvent();
-                break;
-            }
-          }
+					  case 'PlayerFellEvent':
+						PlayerFellEvent();
+						break;
+						
+					  case 'AnimalDroppedEvent':
+						AnimalDroppedEvent();
+						break;
+					}
+				}
+			}
         }
       },
       onError: function (evt) {
