@@ -58,9 +58,14 @@ var webSocket =
 
         if (evt.data) {
 			var updatasplit = evt.data.split(';');
+			var variation;
 			for(var i = 0; i < updatasplit.length; i++)
 			{
 				var datasplit = updatasplit[i].split('=');
+				if(datasplit.length == 2 && datasplit[0] == 'variation')
+				{
+					variation = datasplit[1];
+				}
 				if (datasplit.length == 2 && datasplit[0] == 'event') {
 					console.log('EVENT RECEIVED: ' + datasplit[1]);
 					switch (datasplit[1]) {
@@ -90,6 +95,10 @@ var webSocket =
 						
 					  case 'AnimalDroppedEvent':
 						AnimalDroppedEvent();
+						break;
+						
+					  case 'AnimalAddedEvent':
+						AnimalAddedEvent(variation);
 						break;
 					}
 				}

@@ -26,6 +26,7 @@ var animalJump = 0;
 var animalFall = 0;
 var animalDisplayFall = 0;
 var animalGetUp = 0;
+var animalVariation;
 
 var overlayvisible = true;
 var gamestate = 'loading';
