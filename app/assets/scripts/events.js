@@ -30,3 +30,7 @@ function AnimalDroppedEvent() {
   gotDroppedEvent = true;
 }
 
+function AnimalAddedEvent(variation) {
+  animalVariation = variation;
+}
+
