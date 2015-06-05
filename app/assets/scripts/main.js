@@ -26,6 +26,7 @@ var animalJump = 0;
 var animalFall = 0;
 var animalDisplayFall = 0;
 var animalGetUp = 0;
+var animalVariation;
 
 var overlayvisible = true;
 var gamestate = 'loading';
@@ -54,6 +55,7 @@ function jump(timestamp) {
   animalJump = timestamp;
   // Send jump signal here
   webSocket.sendJumpEvent();
+  gotDroppedEvent = false;
 }
 
 function fall(timestamp) {
@@ -78,8 +80,6 @@ function socketOpened() {
     input_method = 'swipe';
     document.getElementById('swipehelp').style.opacity = 0.8;
   }
-  // Send join event
-  webSocket.sendJoinEvent();
 
   document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
   c = document.getElementById("drawCanvas");
@@ -116,6 +116,7 @@ function step(timestamp) {
 
 var doFall = false;
 var doGetUp = false;
+var gotDroppedEvent = true;
 
 function checkWindowSize() {
   if (w != window.innerWidth || h != window.innerHeight) {
@@ -156,7 +157,7 @@ function stepgame(timestamp) {
     // Fall
     getUp(timestamp);
   }
-  if (animalJump == 0 && isFlicking() && animalFall == 0) {
+  if (animalJump == 0 && isFlicking() && animalFall == 0 && gotDroppedEvent) {
     // Jump
     jump(timestamp);
   }
@@ -247,13 +248,19 @@ window.onload = function () {
 }
 
 function choose_side(side) {
+	var team = 0;
   if (side == 'right') {
     document.getElementById('loadingscreen').style.left = '-100%';
+	team = 1;
   }
   else {
     // left side chosen
     document.getElementById('loadingscreen').style.left = '100%';
   }
+  // Send join event
+  webSocket.sendJoinEvent(team);
+  
+  
   gamestate = 'game';
   window.requestAnimationFrame(step);
 }

@@ -14,7 +14,7 @@ function GameFinishedEvent() {
 
 }
 
-function PlayerJumpedEvent() {
+function AnimalJumpedEvent() {
 
 }
 
@@ -25,3 +25,12 @@ function PlayerFellEvent() {
 function PlayerGetUpEvent() {
   doGetUp = true;
 }
+
+function AnimalDroppedEvent() {
+  gotDroppedEvent = true;
+}
+
+function AnimalAddedEvent(variation) {
+  animalVariation = variation;
+}
+

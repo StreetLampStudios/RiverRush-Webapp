@@ -48,44 +48,61 @@ var webSocket =
         this.doSend(window.prompt("Send what?"));
       },
       sendJumpEvent: function () {
-        this.doSend("event=JumpEvent");
+        this.doSend("event=JumpCommand");
       },
-      sendJoinEvent: function () {
-        this.doSend("event=JoinEvent");
+      sendJoinEvent: function (team) {
+		this.doSend("event=JoinTeamCommand;team="+team);
       },
       onMessage: function (evt) {
         console.log('RESPONSE: ' + evt.data);
 
         if (evt.data) {
-          var datasplit = evt.data.split('=');
-          if (datasplit.length == 2 && datasplit[0] == 'event') {
-            console.log('EVENT RECEIVED: ' + datasplit[1]);
-            switch (datasplit[1]) {
-              case 'GameStartedEvent':
-                GameStartedEvent();
-                break;
+			var updatasplit = evt.data.split(';');
+			var variation;
+			for(var i = 0; i < updatasplit.length; i++)
+			{
+				var datasplit = updatasplit[i].split('=');
+				if(datasplit.length == 2 && datasplit[0] == 'variation')
+				{
+					variation = datasplit[1];
+				}
+				if (datasplit.length == 2 && datasplit[0] == 'event') {
+					console.log('EVENT RECEIVED: ' + datasplit[1]);
+					switch (datasplit[1]) {
+					  case 'GameStartedEvent':
+						GameStartedEvent();
+						break;
 
-              case 'GameStoppedEvent':
-                GameStoppedEvent();
-                break;
+					  case 'GameStoppedEvent':
+						GameStoppedEvent();
+						break;
 
-              case 'GameWaitingEvent':
-                GameWaitingEvent();
-                break;
+					  case 'GameWaitingEvent':
+						GameWaitingEvent();
+						break;
 
-              case 'GameFinishedEvent':
-                GameFinishedEvent();
-                break;
+					  case 'GameFinishedEvent':
+						GameFinishedEvent();
+						break;
 
-              case 'PlayerJumpedEvent':
-                PlayerJumpedEvent();
-                break;
+					  case 'AnimalJumpedEvent':
+						AnimalJumpedEvent();
+						break;
 
-              case 'PlayerFellEvent':
-                PlayerFellEvent();
-                break;
-            }
-          }
+					  case 'PlayerFellEvent':
+						PlayerFellEvent();
+						break;
+						
+					  case 'AnimalDroppedEvent':
+						AnimalDroppedEvent();
+						break;
+						
+					  case 'AnimalAddedEvent':
+						AnimalAddedEvent(variation);
+						break;
+					}
+				}
+			}
         }
       },
       onError: function (evt) {
