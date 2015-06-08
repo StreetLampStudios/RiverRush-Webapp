@@ -18,11 +18,11 @@ function AnimalJumpedEvent() {
 
 }
 
-function PlayerFellEvent() {
+function AnimalFellOffEvent() {
   doFall = true;
 }
 
-function PlayerGetUpEvent() {
+function AnimalReturnedToBoatEvent() {
   doGetUp = true;
 }
 

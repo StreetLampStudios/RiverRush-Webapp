@@ -89,8 +89,12 @@ var webSocket =
 						AnimalJumpedEvent();
 						break;
 
-					  case 'PlayerFellEvent':
-						PlayerFellEvent();
+					  case 'AnimalFellOffEvent':
+						AnimalFellOffEvent();
+						break;
+					
+					  case 'AnimalReturnedToBoatEvent':
+						AnimalReturnedToBoatEvent();
 						break;
 						
 					  case 'AnimalDroppedEvent':
