@@ -3,6 +3,7 @@
   <meta name='viewport' content='width=device-width,user-scalable=no'>
   <title>Web app</title>
   <LINK href="./assets/styles/stylesheet.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="./assets/scripts/resourceloading.js"></script>
   <script type="text/javascript" src="./assets/scripts/socket.js"></script>
   <script type="text/javascript" src="./assets/scripts/main.js"></script>
   <script type="text/javascript" src="./assets/scripts/events.js"></script>
@@ -49,7 +50,9 @@
 </div>
 <div class='overlaycontainer' id='loadingscreen' style='opacity: 1; left: 0%; z-index: 2;'>
   <div class='overlay' id='loadingcontent'>
-    Loading game...
+    <span id='loadingText'>Loading...</span><br>
+	<span id='imagesLoadedInfo'></span><br>
+	<span id='soundsLoadedInfo'></span>
   </div>
 </div>
 </body>

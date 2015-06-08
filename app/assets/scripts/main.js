@@ -68,8 +68,14 @@ function getUp(timestamp) {
 }
 
 var onLoadingScreen = true;
+var connected = false;
 
 function socketOpened() {
+	connected = true;
+	updateLoaded();
+}
+
+function showJoinButtons() {
   // Decide on input method
   console.log(window.DeviceMotionEvent);
   if (accelerometer_supported == 1) {
@@ -84,9 +90,20 @@ function socketOpened() {
   document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
   c = document.getElementById("drawCanvas");
   ctx = c.getContext("2d");
-
-  wavePattern = createPattern(waveImage);
   onLoadingScreen = false;
+  
+  wavePattern = createPattern(waveImage);
+}
+
+function createPattern(image) {
+  var patternSize = image.width;
+  var patternCanvas = document.createElement('canvas');
+  patternCanvas.width = image.width;
+  patternCanvas.height = image.height;
+  var patternCtx = patternCanvas.getContext("2d");
+  patternCtx.drawImage(image, 0, 0, patternSize, patternSize);
+
+  return ctx.createPattern(patternCanvas, 'repeat-x');
 }
 
 function socketOpenError() {
@@ -217,26 +234,6 @@ function calculateWaveSpot(timestamp) {
 var c;
 var ctx;
 
-var animalImage = [];
-animalImage['normal'] = new Image();
-animalImage['normal'].src = './assets/images/monkey_normal.png';
-
-var waveImage = new Image();
-waveImage.src = './assets/images/wave.png';
-
-var wavePattern;
-
-function createPattern(image) {
-  var patternSize = image.width;
-  var patternCanvas = document.createElement('canvas');
-  patternCanvas.width = image.width;
-  patternCanvas.height = image.height;
-  var patternCtx = patternCanvas.getContext("2d");
-  patternCtx.drawImage(image, 0, 0, patternSize, patternSize);
-
-  return ctx.createPattern(patternCanvas, 'repeat-x');
-}
-
 function sendTest() {
   webSocket.sendTest();
 }
@@ -244,7 +241,8 @@ function sendTest() {
 window.onload = function () {
   // Connect to the socket
   webSocket.init();
-  document.getElementById('loadingcontent').innerHTML = 'Connecting to the server at ' + webSocket.socketURL + '...';
+  loadResources();
+  updateLoaded();
 }
 
 function choose_side(side) {
