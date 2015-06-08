@@ -75,6 +75,23 @@ function socketOpened() {
 	updateLoaded();
 }
 
+function setAnimalSquare(square)
+{
+	document.getElementById('animalLocation').style.left = 14 + square * 14 + '%';
+}
+
+var totalInLine = 5;
+function setAnimalNumberInLine(numberInLine)
+{
+	inLinePercentage = numberInLine/totalInLine;
+	document.getElementById('animalLocation').style.bottom = 80 - inLinePercentage * 75 + '%';
+}
+
+function resizeBoat(newWidth)
+{
+	document.getElementById('boatshower').style.width = newWidth + '%';
+}
+
 function showJoinButtons() {
   // Decide on input method
   console.log(window.DeviceMotionEvent);
@@ -92,7 +109,15 @@ function showJoinButtons() {
   ctx = c.getContext("2d");
   onLoadingScreen = false;
   
+  monkeyheadc = document.getElementById("monkeyhead");
+  monkeyheadctx = monkeyheadc.getContext("2d");
+  
   wavePattern = createPattern(waveImage);
+}
+
+function colorMonkeyHead()
+{
+	monkeyheadctx.drawImage(animalImage['head'],0,0,107,107);
 }
 
 function createPattern(image) {
@@ -123,6 +148,15 @@ function socketDisconnect() {
   document.getElementById('loadingscreen').style.left = '0%';
 }
 
+function startStepping(timestamp) {
+	locationShowing = timestamp;
+	step(timestamp);
+}
+
+function updateBoatProgress(progress) {
+	document.getElementById('boatshower').style.right = progress * 0.7 + '%';
+}
+
 function step(timestamp) {
   if (gamestate == 'game') {
     stepgame(timestamp);
@@ -134,6 +168,8 @@ function step(timestamp) {
 var doFall = false;
 var doGetUp = false;
 var gotDroppedEvent = true;
+
+var locationShowing = 0;
 
 function checkWindowSize() {
   if (w != window.innerWidth || h != window.innerHeight) {
@@ -163,6 +199,12 @@ function stepgame(timestamp) {
   var animalY = 0;
 
   checkWindowSize();
+  
+  if(locationShowing && locationShowing < timestamp - 3000)
+  {
+	locationShowing = 0;
+	resizeBoat(30);
+  }
 
   if (doFall) {
     doFall = false;
@@ -234,6 +276,9 @@ function calculateWaveSpot(timestamp) {
 var c;
 var ctx;
 
+var monkeyheadc;
+var monkeyheadctx;
+
 function sendTest() {
   webSocket.sendTest();
 }
@@ -260,7 +305,7 @@ function choose_side(side) {
   
   
   gamestate = 'game';
-  window.requestAnimationFrame(step);
+  window.requestAnimationFrame(startStepping);
 }
 
 var a = false;

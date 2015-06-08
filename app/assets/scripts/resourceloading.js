@@ -52,12 +52,16 @@ var animalRGBKs;
 function setAnimalVariation(variation)
 {
 	animalImage['normal'] = generateTintImage(animalImage['normal'], animalRGBKs, animalVariations[variation][0], animalVariations[variation][1], animalVariations[variation][2]);
+	animalImage['head'] = generateTintImage(animalImage['head'], animalheadRGBKs, animalVariations[variation][0], animalVariations[variation][1], animalVariations[variation][2]);
+	colorMonkeyHead();
 }
 
 function setUpImages()
 {
 	animalImage['normal'] = loadImage('/assets/images/monkey_normal.png');
+	animalImage['head'] = loadImage('/assets/images/monkeyhead.png');
 	animalRGBKs = generateRGBKs(animalImage['normal']);
+	animalheadRGBKs = generateRGBKs(animalImage['head']);
 
 	waveImage = loadImage('/assets/images/wave.png');
 }
@@ -181,6 +185,7 @@ function loadResources()
 	setLoadableImage("/assets/images/holding_device.png",1);
 	setLoadableImage("/assets/images/swipe_up.png",1);
 	setLoadableImage("/assets/images/up_arrow.png",1);
+	setLoadableImage("/assets/images/monkeyhead.png",1);
 	setLoadableImage("/assets/images/wave.png",1);
 	
 	// Sounds

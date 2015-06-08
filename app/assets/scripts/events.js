@@ -30,8 +30,20 @@ function AnimalDroppedEvent() {
   gotDroppedEvent = true;
 }
 
-function AnimalAddedEvent(variation) {
+function AnimalAddedEvent(variation, square, numberInLine) {
   animalVariation = variation;
   setAnimalVariation(variation);
+  
+  if(square)
+  {
+	setAnimalSquare(square);
+  }
+  if(numberInLine)
+  {
+	setAnimalNumberInLine(numberInLine);
+  }
 }
 
+function TeamProgressEvent(progress) {
+	updateBoatProgress(progress);
+}
