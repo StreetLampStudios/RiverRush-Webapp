@@ -140,6 +140,7 @@ function checkWindowSize() {
 
 function stepgame(timestamp) {
 
+	document.getElementById('xmovement').innerHTML = Math.round(accelerationX);
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, 400, 400);
 
@@ -157,7 +158,17 @@ function stepgame(timestamp) {
     // Fall
     getUp(timestamp);
   }
-  if (animalJump == 0 && isFlicking() && animalFall == 0 && gotDroppedEvent) {
+  if(isFlickingRight())
+  {
+	alert('Hou je bek');
+	rightFlick = false;
+  }
+  if(isFlickingLeft())
+  {
+	alert('Hou je bakkes');
+	leftFlick = false;
+  }
+  if (animalJump == 0 && isFlickingUp() && animalFall == 0 && gotDroppedEvent) {
     // Jump
     jump(timestamp);
   }
@@ -266,21 +277,28 @@ function choose_side(side) {
 }
 
 var a = false;
-function isFlicking() {
+function isFlickingUp() {
   y = Math.round(accelerationY - yOffset);
   z = Math.round(accelerationZ - zOffset);
   return ((z > 8 || y < -8) && input_method == 'accelerometer') || (upFlick && input_method == 'swipe');
 }
 
+function isFlickingLeft() {
+  x = Math.round(accelerationY - yOffset);
+  return (x < -3 && Math.abs(y) <= 4 && Math.abs(z) <= 4 && input_method == 'accelerometer') || (leftFlick && input_method == 'swipe');
+
+}
+
+function isFlickingRight() {
+   x = Math.round(accelerationY - yOffset);
+  return (x > 3 && Math.abs(y) <= 4 && Math.abs(z) <= 4 && input_method == 'accelerometer') || (rightFlick && input_method == 'swipe');
+
+}
+
 function checkFlick() {
   y = Math.round(accelerationY - yOffset);
   z = Math.round(accelerationZ - zOffset);
-  if (isFlicking()) {
-    document.getElementById('container').style.backgroundColor = 'red';
-  }
-  else {
-    document.getElementById('container').style.background = 'white';
-  }
+  x = Math.round(accelerationX - xOffset);
 }
 
 document.addEventListener('touchstart', handleTouchStart, false);
@@ -297,6 +315,8 @@ function handleTouchStart(evt) {
 };
 
 var upFlick = false;
+var leftFlick = false;
+var rightFlick = false;
 
 function handleTouchMove(evt) {
   if (!xDown || !yDown) {
@@ -312,8 +332,10 @@ function handleTouchMove(evt) {
   if (Math.abs(xDiff) > Math.abs(yDiff)) {/*most significant*/
     if (xDiff > 0) {
       /* left swipe */
+	  leftFlick = true;
     } else {
       /* right swipe */
+	  rightFlick = true;
     }
   } else {
     if (yDiff > 0) {

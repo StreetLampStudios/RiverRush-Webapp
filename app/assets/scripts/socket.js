@@ -50,7 +50,14 @@ var webSocket =
       sendJumpEvent: function () {
         this.doSend("event=JumpCommand");
       },
-      sendJoinEvent: function (team) {
+      sendVoteBoatMoveCommand: function (directionCode) {
+		if(directionCode != 'RIGHT')
+		{
+			directionCode = 'LEFT';
+		}
+		this.doSend("event=VoteBoatMoveCommand;directionCode="+directionCode);
+      },
+	  sendJoinEvent: function (team) {
 		this.doSend("event=JoinTeamCommand;team="+team);
       },
       onMessage: function (evt) {
