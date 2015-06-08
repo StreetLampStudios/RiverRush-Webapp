@@ -32,5 +32,6 @@ function AnimalDroppedEvent() {
 
 function AnimalAddedEvent(variation) {
   animalVariation = variation;
+  setAnimalVariation(variation);
 }
 
