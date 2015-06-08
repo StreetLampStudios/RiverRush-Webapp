@@ -3,6 +3,7 @@
   <meta name='viewport' content='width=device-width,user-scalable=no'>
   <title>Web app</title>
   <LINK href="./assets/styles/stylesheet.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="./assets/scripts/resourceloading.js"></script>
   <script type="text/javascript" src="./assets/scripts/socket.js"></script>
   <script type="text/javascript" src="./assets/scripts/main.js"></script>
   <script type="text/javascript" src="./assets/scripts/events.js"></script>
@@ -22,12 +23,23 @@
     </div>
   </div>
   <div class='normalBackground'>
-    <div class='airBackground'></div>
+    <div class='airBackground'><span id='xmovement'>HAHAHA NOOB JIJ HEBT GEEN ACCELEROMETER SUPPORT</span></div>
     <div class='waterBackground'></div>
   </div>
   <div class='overBackground'>
     <div class='canvasContainer'>
-      <canvas id='drawCanvas' width="400" height="400"></canvas>
+	   <div id='gameholder'>
+		<canvas id='drawCanvas' width="400" height="400"></canvas>
+		<div id='boatshower' style='width: 100%; right: 0%;'>
+			<div style='position: relative;'>
+			  <img src='/assets/images/boatshower.png' style='width: 100%;'>
+			  <div id='animalLocation' style='position: absolute; left: 42%; bottom: 50%; display: inline-block; text-align: left; width: 100%;'>
+				<img src='/assets/images/youpointer.png' style='width: 15%;'><br>
+				<canvas id='monkeyhead' style='width: 15%;' width='107' height='107'></canvas>
+			  </div>
+		</div>
+		</div>
+	  </div>
     </div>
   </div>
 </div>
@@ -49,7 +61,9 @@
 </div>
 <div class='overlaycontainer' id='loadingscreen' style='opacity: 1; left: 0%; z-index: 2;'>
   <div class='overlay' id='loadingcontent'>
-    Loading game...
+    <span id='loadingText'>Loading...</span><br>
+	<span id='imagesLoadedInfo'></span><br>
+	<span id='soundsLoadedInfo'></span>
   </div>
 </div>
 </body>

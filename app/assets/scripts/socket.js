@@ -50,7 +50,14 @@ var webSocket =
       sendJumpEvent: function () {
         this.doSend("event=JumpCommand");
       },
-      sendJoinEvent: function (team) {
+      sendVoteBoatMoveCommand: function (directionCode) {
+		if(directionCode != 'RIGHT')
+		{
+			directionCode = 'LEFT';
+		}
+		this.doSend("event=VoteBoatMoveCommand;directionCode="+directionCode);
+      },
+	  sendJoinEvent: function (team) {
 		this.doSend("event=JoinTeamCommand;team="+team);
       },
       onMessage: function (evt) {
@@ -58,13 +65,13 @@ var webSocket =
 
         if (evt.data) {
 			var updatasplit = evt.data.split(';');
-			var variation;
+			var vars = [];
 			for(var i = 0; i < updatasplit.length; i++)
 			{
 				var datasplit = updatasplit[i].split('=');
-				if(datasplit.length == 2 && datasplit[0] == 'variation')
+				if(datasplit.length == 2 && datasplit[0] != 'event')
 				{
-					variation = datasplit[1];
+					vars[datasplit[0]] = datasplit[1];
 				}
 				if (datasplit.length == 2 && datasplit[0] == 'event') {
 					console.log('EVENT RECEIVED: ' + datasplit[1]);
@@ -89,8 +96,12 @@ var webSocket =
 						AnimalJumpedEvent();
 						break;
 
-					  case 'PlayerFellEvent':
-						PlayerFellEvent();
+					  case 'AnimalFellOffEvent':
+						AnimalFellOffEvent();
+						break;
+					
+					  case 'AnimalReturnedToBoatEvent':
+						AnimalReturnedToBoatEvent();
 						break;
 						
 					  case 'AnimalDroppedEvent':
@@ -98,7 +109,11 @@ var webSocket =
 						break;
 						
 					  case 'AnimalAddedEvent':
-						AnimalAddedEvent(variation);
+						AnimalAddedEvent(vars['variation'], vars['square'], vars['numberInLine']);
+						break;
+						
+					  case 'TeamProgressEvent':
+						TeamProgressEvent(vars['progress']);
 						break;
 					}
 				}

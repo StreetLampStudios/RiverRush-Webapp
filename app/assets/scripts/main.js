@@ -49,6 +49,9 @@ function turnOffOverlay() {
   }
 }
 
+function moveCommand(directionCode, timestamp) {
+  webSocket.sendVoteBoatMoveCommand(directionCode);
+}
 
 function jump(timestamp) {
   turnOffOverlay();
@@ -68,8 +71,31 @@ function getUp(timestamp) {
 }
 
 var onLoadingScreen = true;
+var connected = false;
 
 function socketOpened() {
+	connected = true;
+	updateLoaded();
+}
+
+function setAnimalSquare(square)
+{
+	document.getElementById('animalLocation').style.left = 14 + square * 14 + '%';
+}
+
+var totalInLine = 5;
+function setAnimalNumberInLine(numberInLine)
+{
+	inLinePercentage = numberInLine/totalInLine;
+	document.getElementById('animalLocation').style.bottom = 80 - inLinePercentage * 75 + '%';
+}
+
+function resizeBoat(newWidth)
+{
+	document.getElementById('boatshower').style.width = newWidth + '%';
+}
+
+function showJoinButtons() {
   // Decide on input method
   console.log(window.DeviceMotionEvent);
   if (accelerometer_supported == 1) {
@@ -84,9 +110,28 @@ function socketOpened() {
   document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
   c = document.getElementById("drawCanvas");
   ctx = c.getContext("2d");
-
-  wavePattern = createPattern(waveImage);
   onLoadingScreen = false;
+  
+  monkeyheadc = document.getElementById("monkeyhead");
+  monkeyheadctx = monkeyheadc.getContext("2d");
+  
+  wavePattern = createPattern(waveImage);
+}
+
+function colorMonkeyHead()
+{
+	monkeyheadctx.drawImage(animalImage['head'],0,0,107,107);
+}
+
+function createPattern(image) {
+  var patternSize = image.width;
+  var patternCanvas = document.createElement('canvas');
+  patternCanvas.width = image.width;
+  patternCanvas.height = image.height;
+  var patternCtx = patternCanvas.getContext("2d");
+  patternCtx.drawImage(image, 0, 0, patternSize, patternSize);
+
+  return ctx.createPattern(patternCanvas, 'repeat-x');
 }
 
 function socketOpenError() {
@@ -106,6 +151,15 @@ function socketDisconnect() {
   document.getElementById('loadingscreen').style.left = '0%';
 }
 
+function startStepping(timestamp) {
+	locationShowing = timestamp;
+	step(timestamp);
+}
+
+function updateBoatProgress(progress) {
+	document.getElementById('boatshower').style.right = progress * 0.7 + '%';
+}
+
 function step(timestamp) {
   if (gamestate == 'game') {
     stepgame(timestamp);
@@ -117,6 +171,8 @@ function step(timestamp) {
 var doFall = false;
 var doGetUp = false;
 var gotDroppedEvent = true;
+
+var locationShowing = 0;
 
 function checkWindowSize() {
   if (w != window.innerWidth || h != window.innerHeight) {
@@ -140,12 +196,19 @@ function checkWindowSize() {
 
 function stepgame(timestamp) {
 
+	document.getElementById('xmovement').innerHTML = Math.round(accelerationX);
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, 400, 400);
 
   var animalY = 0;
 
   checkWindowSize();
+  
+  if(locationShowing && locationShowing < timestamp - 3000)
+  {
+	locationShowing = 0;
+	resizeBoat(30);
+  }
 
   if (doFall) {
     doFall = false;
@@ -157,7 +220,17 @@ function stepgame(timestamp) {
     // Fall
     getUp(timestamp);
   }
-  if (animalJump == 0 && isFlicking() && animalFall == 0 && gotDroppedEvent) {
+  if(isFlickingRight() && animalJump == 0 && animalFall == 0)
+  {
+	moveCommand('RIGHT', timestamp);
+	rightFlick = false;
+  }
+  if(isFlickingLeft())
+  {
+	moveCommand('LEFT', timestamp);
+	leftFlick = false;
+  }
+  if (animalJump == 0 && isFlickingUp() && animalFall == 0 && gotDroppedEvent) {
     // Jump
     jump(timestamp);
   }
@@ -217,25 +290,8 @@ function calculateWaveSpot(timestamp) {
 var c;
 var ctx;
 
-var animalImage = [];
-animalImage['normal'] = new Image();
-animalImage['normal'].src = './assets/images/monkey_normal.png';
-
-var waveImage = new Image();
-waveImage.src = './assets/images/wave.png';
-
-var wavePattern;
-
-function createPattern(image) {
-  var patternSize = image.width;
-  var patternCanvas = document.createElement('canvas');
-  patternCanvas.width = image.width;
-  patternCanvas.height = image.height;
-  var patternCtx = patternCanvas.getContext("2d");
-  patternCtx.drawImage(image, 0, 0, patternSize, patternSize);
-
-  return ctx.createPattern(patternCanvas, 'repeat-x');
-}
+var monkeyheadc;
+var monkeyheadctx;
 
 function sendTest() {
   webSocket.sendTest();
@@ -244,7 +300,8 @@ function sendTest() {
 window.onload = function () {
   // Connect to the socket
   webSocket.init();
-  document.getElementById('loadingcontent').innerHTML = 'Connecting to the server at ' + webSocket.socketURL + '...';
+  loadResources();
+  updateLoaded();
 }
 
 function choose_side(side) {
@@ -262,25 +319,30 @@ function choose_side(side) {
   
   
   gamestate = 'game';
-  window.requestAnimationFrame(step);
+  window.requestAnimationFrame(startStepping);
 }
 
 var a = false;
-function isFlicking() {
+function isFlickingUp() {
   y = Math.round(accelerationY - yOffset);
   z = Math.round(accelerationZ - zOffset);
   return ((z > 8 || y < -8) && input_method == 'accelerometer') || (upFlick && input_method == 'swipe');
 }
 
+function isFlickingLeft() {
+  return leftFlick;
+
+}
+
+function isFlickingRight() {
+  return rightFlick;
+
+}
+
 function checkFlick() {
   y = Math.round(accelerationY - yOffset);
   z = Math.round(accelerationZ - zOffset);
-  if (isFlicking()) {
-    document.getElementById('container').style.backgroundColor = 'red';
-  }
-  else {
-    document.getElementById('container').style.background = 'white';
-  }
+  x = Math.round(accelerationX - xOffset);
 }
 
 document.addEventListener('touchstart', handleTouchStart, false);
@@ -297,6 +359,8 @@ function handleTouchStart(evt) {
 };
 
 var upFlick = false;
+var leftFlick = false;
+var rightFlick = false;
 
 function handleTouchMove(evt) {
   if (!xDown || !yDown) {
@@ -312,8 +376,10 @@ function handleTouchMove(evt) {
   if (Math.abs(xDiff) > Math.abs(yDiff)) {/*most significant*/
     if (xDiff > 0) {
       /* left swipe */
+	  leftFlick = true;
     } else {
       /* right swipe */
+	  rightFlick = true;
     }
   } else {
     if (yDiff > 0) {
