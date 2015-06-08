@@ -9,7 +9,7 @@ animalVariations[6] = [100,100,100];
 animalVariations[7] = [0,125,255];
 animalVariations[8] = [150,30,165];
 animalVariations[9] = [140,100,255];
-animalVariations[10] = [255,100,100];
+animalVariations[10] = [255,255,255];
 
 function generateTintImage( img, rgbks, red, green, blue ) {
 	var buff = document.createElement( "canvas" );
@@ -60,18 +60,6 @@ function setUpImages()
 	animalRGBKs = generateRGBKs(animalImage['normal']);
 
 	waveImage = loadImage('/assets/images/wave.png');
-}
-
-function doSomething()
-{
-	sprites['animal'] = new Image();
-	sprites['animal'].src = '/assets/images/monkey_normal.png';
-	for(var i in sprites)
-	{
-		console.log(i);
-		starredSprites[i] = generateRGBKs(sprites[i]);
-		testImg = generateTintImage(sprites[i], starredSprites[i], 255, 0, 0);
-	}
 }
 	
 function generateRGBKs( img ) {
@@ -128,9 +116,6 @@ function generateRGBKs( img ) {
 
 	return rgbks;
 }
-
-
-
 
 var resoures_loaded = false;
 var soundsToBeLoaded = 0;
@@ -200,6 +185,7 @@ function loadResources()
 	
 	// Sounds
 	var soundData = [];
+	// ADD THIS CODE LATER:
 	/*soundData['playerhit'] = {url: './sounds/playerhit.mp3',required:true};
 	soundData['playerselectionMusic'] = {url: './sounds/Broken Reality.mp3',loop:true};*/
 	
