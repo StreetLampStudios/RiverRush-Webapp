@@ -53,6 +53,14 @@ function moveCommand(directionCode, timestamp) {
   webSocket.sendVoteBoatMoveCommand(directionCode);
 }
 
+function jump(timestamp) {
+  turnOffOverlay();
+  animalJump = timestamp;
+  // Send jump signal here
+  webSocket.sendJumpEvent();
+  gotDroppedEvent = false;
+}
+
 function fall(timestamp) {
   animalFall = timestamp;
   animalDisplayFall = Math.max(animalFall, animalJump + 1000);
