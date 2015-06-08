@@ -49,13 +49,8 @@ function turnOffOverlay() {
   }
 }
 
-
-function jump(timestamp) {
-  turnOffOverlay();
-  animalJump = timestamp;
-  // Send jump signal here
-  webSocket.sendJumpEvent();
-  gotDroppedEvent = false;
+function moveCommand(directionCode, timestamp) {
+  webSocket.sendVoteBoatMoveCommand(directionCode);
 }
 
 function fall(timestamp) {
@@ -158,14 +153,14 @@ function stepgame(timestamp) {
     // Fall
     getUp(timestamp);
   }
-  if(isFlickingRight())
+  if(isFlickingRight() && animalJump == 0 && animalFall == 0)
   {
-	alert('Hou je bek');
+	moveCommand('RIGHT', timestamp);
 	rightFlick = false;
   }
   if(isFlickingLeft())
   {
-	alert('Hou je bakkes');
+	moveCommand('LEFT', timestamp);
 	leftFlick = false;
   }
   if (animalJump == 0 && isFlickingUp() && animalFall == 0 && gotDroppedEvent) {
@@ -284,14 +279,12 @@ function isFlickingUp() {
 }
 
 function isFlickingLeft() {
-  x = Math.round(accelerationY - yOffset);
-  return (x < -3 && Math.abs(y) <= 4 && Math.abs(z) <= 4 && input_method == 'accelerometer') || (leftFlick && input_method == 'swipe');
+  return leftFlick;
 
 }
 
 function isFlickingRight() {
-   x = Math.round(accelerationY - yOffset);
-  return (x > 3 && Math.abs(y) <= 4 && Math.abs(z) <= 4 && input_method == 'accelerometer') || (rightFlick && input_method == 'swipe');
+  return rightFlick;
 
 }
 
