@@ -44,3 +44,6 @@ function AnimalAddedEvent(variation, square, numberInLine) {
   }
 }
 
+function TeamProgressEvent(progress) {
+	updateBoatProgress(progress);
+}

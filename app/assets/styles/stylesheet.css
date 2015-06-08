@@ -37,11 +37,11 @@ body {
 	z-index: 1;
 	width: 100%;
 	
-	-webkit-transition: width 1s ease-in-out;
-	-moz-transition: width 1s ease-in-out;
-	-ms-transition: width 1s ease-in-out;
-	-o-transition: width 1s ease-in-out;
-	transition: width 1s ease-in-out;
+	-webkit-transition: width 1s ease-in-out, right 0.5s linear;
+	-moz-transition: width 1s ease-in-out, right 0.5s linear;
+	-ms-transition: width 1s ease-in-out, right 0.5s linear;
+	-o-transition: width 1s ease-in-out, right 0.5s linear;
+	transition: width 1s ease-in-out, right 0.5s linear;
 }
 
 #drawCanvas {

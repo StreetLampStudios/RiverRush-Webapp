@@ -148,6 +148,15 @@ function socketDisconnect() {
   document.getElementById('loadingscreen').style.left = '0%';
 }
 
+function startStepping(timestamp) {
+	locationShowing = timestamp;
+	step(timestamp);
+}
+
+function updateBoatProgress(progress) {
+	document.getElementById('boatshower').style.right = progress * 0.7 + '%';
+}
+
 function step(timestamp) {
   if (gamestate == 'game') {
     stepgame(timestamp);
@@ -159,6 +168,8 @@ function step(timestamp) {
 var doFall = false;
 var doGetUp = false;
 var gotDroppedEvent = true;
+
+var locationShowing = 0;
 
 function checkWindowSize() {
   if (w != window.innerWidth || h != window.innerHeight) {
@@ -188,6 +199,12 @@ function stepgame(timestamp) {
   var animalY = 0;
 
   checkWindowSize();
+  
+  if(locationShowing && locationShowing < timestamp - 3000)
+  {
+	locationShowing = 0;
+	resizeBoat(30);
+  }
 
   if (doFall) {
     doFall = false;
@@ -288,7 +305,7 @@ function choose_side(side) {
   
   
   gamestate = 'game';
-  window.requestAnimationFrame(step);
+  window.requestAnimationFrame(startStepping);
 }
 
 var a = false;
