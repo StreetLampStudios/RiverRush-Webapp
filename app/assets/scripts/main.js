@@ -75,6 +75,23 @@ function socketOpened() {
 	updateLoaded();
 }
 
+function setAnimalSquare(square)
+{
+	document.getElementById('animalLocation').style.left = 14 + square * 14 + '%';
+}
+
+var totalInLine = 5;
+function setAnimalNumberInLine(numberInLine)
+{
+	inLinePercentage = numberInLine/totalInLine;
+	document.getElementById('animalLocation').style.bottom = 80 - inLinePercentage * 75 + '%';
+}
+
+function resizeBoat(newWidth)
+{
+	document.getElementById('boatshower').style.width = newWidth + '%';
+}
+
 function showJoinButtons() {
   // Decide on input method
   console.log(window.DeviceMotionEvent);
@@ -92,7 +109,15 @@ function showJoinButtons() {
   ctx = c.getContext("2d");
   onLoadingScreen = false;
   
+  monkeyheadc = document.getElementById("monkeyhead");
+  monkeyheadctx = monkeyheadc.getContext("2d");
+  
   wavePattern = createPattern(waveImage);
+}
+
+function colorMonkeyHead()
+{
+	monkeyheadctx.drawImage(animalImage['head'],0,0,107,107);
 }
 
 function createPattern(image) {
@@ -233,6 +258,9 @@ function calculateWaveSpot(timestamp) {
 
 var c;
 var ctx;
+
+var monkeyheadc;
+var monkeyheadctx;
 
 function sendTest() {
   webSocket.sendTest();
