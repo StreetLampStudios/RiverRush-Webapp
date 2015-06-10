@@ -12,6 +12,7 @@ window.ondevicemotion = function (e) {
   if (accelerometer_supported < 1) {
     accelerometer_supported++;
   }
+  
   accelerationX = event.acceleration.x;
   accelerationY = event.acceleration.y;
   accelerationZ = event.acceleration.z;
@@ -185,6 +186,11 @@ var doGetUp = false;
 var gotDroppedEvent = true;
 
 var locationShowing = 0;
+var flickingDisabled = 0;
+
+var rightbound = 10;
+var leftbound = -10;
+var upperbound = 7.5;
 
 function checkWindowSize() {
   if (w != window.innerWidth || h != window.innerHeight) {
@@ -232,19 +238,25 @@ function stepgame(timestamp) {
     // Fall
     getUp(timestamp);
   }
-  if(isFlickingRight() && animalJump == 0 && animalFall == 0)
+  if(flickingDisabled < timestamp)
   {
-	moveCommand('RIGHT', timestamp);
-	rightFlick = false;
-  }
-  if(isFlickingLeft())
-  {
-	moveCommand('LEFT', timestamp);
-	leftFlick = false;
-  }
-  if (animalJump == 0 && isFlickingUp() && animalFall == 0 && gotDroppedEvent) {
-    // Jump
-    jump(timestamp);
+	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && gotDroppedEvent) {
+		// Jump
+		jump(timestamp);
+		flickingDisabled = timestamp + 500;
+	  }
+	  if(isFlickingRight() && animalJump == 0 && animalFall == 0)
+	  {
+		moveCommand('RIGHT', timestamp);
+		rightFlick = false;
+		flickingDisabled = timestamp + 500;
+	  }
+	  if(isFlickingLeft())
+	  {
+		moveCommand('LEFT', timestamp);
+		leftFlick = false;
+		flickingDisabled = timestamp + 500;
+	  }
   }
   if (animalJump != 0) {
     if (animalJump < timestamp - 1000) {
@@ -322,6 +334,17 @@ window.onload = function () {
 }
 
 function choose_side(side) {
+	// Decide on input method
+  console.log(window.DeviceMotionEvent);
+  if (accelerometer_supported == 1) {
+    input_method = 'accelerometer';
+    document.getElementById('flickhelp').style.opacity = 0.8;
+  }
+  else {
+    input_method = 'swipe';
+    document.getElementById('swipehelp').style.opacity = 0.8;
+  }
+  
 	var team = 0;
   if (side == 'right') {
     document.getElementById('loadingscreen').style.left = '-100%';
@@ -340,19 +363,18 @@ function choose_side(side) {
 }
 
 var a = false;
+var flickDisabled = 0;
 function isFlickingUp() {
-  y = Math.round(accelerationY - yOffset);
-  z = Math.round(accelerationZ - zOffset);
-  return ((z > 8 || y < -8) && input_method == 'accelerometer') || (upFlick && input_method == 'swipe');
+  return (((accelerationZ * 1.5 + accelerationY)/1.5 < -upperbound) && input_method == 'accelerometer') || (upFlick && input_method == 'swipe');
 }
 
 function isFlickingLeft() {
-  return leftFlick;
+  return (accelerationX < leftbound && input_method == 'accelerometer') || (rightFlick && input_method == 'swipe');
 
 }
 
 function isFlickingRight() {
-  return rightFlick;
+  return (accelerationX > rightbound && input_method == 'accelerometer') || (rightFlick && input_method == 'swipe');
 
 }
 
