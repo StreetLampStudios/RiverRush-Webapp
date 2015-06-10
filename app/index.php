@@ -7,6 +7,7 @@
   <script type="text/javascript" src="./assets/scripts/socket.js"></script>
   <script type="text/javascript" src="./assets/scripts/main.js"></script>
   <script type="text/javascript" src="./assets/scripts/events.js"></script>
+  <script type="text/javascript" src="./assets/scripts/vibration.js"></script>
   <script src="./assets/scripts/touch-emulator.js"></script>
   <script>TouchEmulator();</script>
 </head>

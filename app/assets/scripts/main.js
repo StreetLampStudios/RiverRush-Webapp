@@ -65,6 +65,7 @@ function jump(timestamp) {
 }
 
 function fall(timestamp) {
+  vibrate(500);
   animalFall = timestamp;
   animalDisplayFall = Math.max(animalFall, animalJump + 1000);
 }
