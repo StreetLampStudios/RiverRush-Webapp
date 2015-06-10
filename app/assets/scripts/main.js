@@ -9,7 +9,7 @@ var zOffset = 0;
 
 var accelerometer_supported = -1;
 window.ondevicemotion = function (e) {
-  if (accelerometer_supported < 1) {
+  if (accelerometer_supported < 1 && event && event.acceleration && event.acceleration.x) {
     accelerometer_supported++;
   }
   
@@ -42,12 +42,8 @@ var servergamestate = 'waitingForState';
 function turnOffOverlay() {
   if (overlayvisible) {
     overlayvisible = false;
-    if (input_method == 'accelerometer') {
-      document.getElementById('flickhelp').style.opacity = 0;
-    }
-    else {
-      document.getElementById('swipehelp').style.opacity = 0;
-    }
+    document.getElementById('flickhelp').style.opacity = 0;
+    document.getElementById('swipehelp').style.opacity = 0;
     document.getElementById('lookAtMonitor').style.opacity = 1;
   }
 }
@@ -65,6 +61,7 @@ function jump(timestamp) {
 }
 
 function fall(timestamp) {
+  vibrate(500);
   animalFall = timestamp;
   animalDisplayFall = Math.max(animalFall, animalJump + 1000);
 }
@@ -169,7 +166,7 @@ function startStepping(timestamp) {
 function updateBoatProgress(progress) {
 	if(document.getElementById('boatshower').style.width == '30%')
 	{
-		document.getElementById('boatshower').style.right = progress * 0.7 + '%';
+		document.getElementById('boatshower').style.right = Math.max(Math.min(progress,100),0) * 0.7 + '%';
 	}
 }
 
@@ -213,8 +210,6 @@ function checkWindowSize() {
 }
 
 function stepgame(timestamp) {
-
-	document.getElementById('xmovement').innerHTML = Math.round(accelerationX);
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, 400, 400);
 
