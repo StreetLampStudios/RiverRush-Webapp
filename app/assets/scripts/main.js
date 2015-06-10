@@ -80,9 +80,16 @@ function socketOpened() {
 	updateLoaded();
 }
 
-function setAnimalSquare(square)
+var sectors = [];
+sectors['FRONT'] = 1;
+sectors['FRONT_MIDDLE'] = 2;
+sectors['MIDDLE'] = 3;
+sectors['BACK_MIDDLE'] = 4;
+sectors['BACK'] = 5;
+function setAnimalSector(sector)
 {
-	document.getElementById('animalLocation').style.left = 14 + square * 14 + '%';
+	sectorID = sectors[sector];
+	document.getElementById('animalLocation').style.left = 14 + sectorID * 14 + '%';
 }
 
 var totalInLine = 5;
@@ -159,7 +166,10 @@ function startStepping(timestamp) {
 }
 
 function updateBoatProgress(progress) {
-	document.getElementById('boatshower').style.right = progress * 0.7 + '%';
+	if(document.getElementById('boatshower').style.width == '30%')
+	{
+		document.getElementById('boatshower').style.right = progress * 0.7 + '%';
+	}
 }
 
 function step(timestamp) {
