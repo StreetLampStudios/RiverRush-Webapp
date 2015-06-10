@@ -12,6 +12,7 @@
   <script>TouchEmulator();</script>
 </head>
 <body>
+<div id='wrapper'>
 <div style='background-color: white;' id='container'>
   <input type='hidden' id='serverTXTContent' value='<?php if (file_exists('server.txt')) {
     echo htmlentities(file_get_contents('server.txt'));
@@ -24,7 +25,7 @@
     </div>
   </div>
   <div class='normalBackground'>
-    <div class='airBackground'><span id='xmovement'>HAHAHA NOOB JIJ HEBT GEEN ACCELEROMETER SUPPORT</span></div>
+    <div class='airBackground'></div>
     <div class='waterBackground'></div>
   </div>
   <div class='overBackground'>
@@ -66,6 +67,7 @@
 	<span id='imagesLoadedInfo'></span><br>
 	<span id='soundsLoadedInfo'></span>
   </div>
+</div>
 </div>
 </body>
 </html>
