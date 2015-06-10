@@ -246,7 +246,7 @@ function stepgame(timestamp) {
 		rightFlick = false;
 		flickingDisabled = timestamp + 500;
 	  }
-	  if(isFlickingLeft())
+	  if(isFlickingLeft() && animalJump == 0 && animalFall == 0)
 	  {
 		moveCommand('LEFT', timestamp);
 		leftFlick = false;
@@ -364,7 +364,7 @@ function isFlickingUp() {
 }
 
 function isFlickingLeft() {
-  return (accelerationX < leftbound && input_method == 'accelerometer') || (rightFlick && input_method == 'swipe');
+  return (accelerationX < leftbound && input_method == 'accelerometer') || (leftFlick && input_method == 'swipe');
 
 }
 
