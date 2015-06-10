@@ -50,12 +50,12 @@ var webSocket =
       sendJumpEvent: function () {
         this.doSend("event=JumpCommand");
       },
-      sendVoteBoatMoveCommand: function (directionCode) {
-		if(directionCode != 'RIGHT')
+      sendVoteBoatMoveCommand: function (direction) {
+		if(direction != 'RIGHT')
 		{
-			directionCode = 'LEFT';
+			direction = 'LEFT';
 		}
-		this.doSend("event=VoteBoatMoveCommand;directionCode="+directionCode);
+		this.doSend("event=VoteBoatMoveCommand;direction="+direction);
       },
 	  sendJoinEvent: function (team) {
 		this.doSend("event=JoinTeamCommand;team="+team);
@@ -109,7 +109,7 @@ var webSocket =
 						break;
 						
 					  case 'AnimalAddedEvent':
-						AnimalAddedEvent(vars['variation'], vars['square'], vars['numberInLine']);
+						AnimalAddedEvent(vars['variation'], vars['team'], vars['square'], vars['numberInLine']);
 						break;
 						
 					  case 'TeamProgressEvent':

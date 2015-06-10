@@ -18,7 +18,9 @@ window.ondevicemotion = function (e) {
   checkFlick();
 }
 
-
+var teamID;
+var teamName = '';
+var teamNames = ['Team Pirate', 'Team Robot'];
 var animalY = 0;
 var animalYspeed = 0;
 
@@ -267,6 +269,11 @@ function stepgame(timestamp) {
   ctx.fillStyle = 'brown';
   ctx.drawImage(animalImage['normal'], 160, 340 - 80 - 80 + 10 - animalY, 80, 80);
   ctx.fillRect(100, 340 - 80, 200, 80);
+  ctx.font = "20px Arial";
+  ctx.textAlign = 'center';
+  ctx.fillStyle = 'white';
+  ctx.fillText(teamName,200,340-50);
+  
 
   ctx.fillStyle = '#3737ff';
   ctx.fillRect(0, 340, 400, 80);
