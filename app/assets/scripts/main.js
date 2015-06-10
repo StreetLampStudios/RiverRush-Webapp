@@ -250,14 +250,12 @@ function stepgame(timestamp) {
 		moveCommand('RIGHT', timestamp);
 		rightFlick = false;
 		flickingDisabled = timestamp + 500;
-		alert('right');
 	  }
 	  if(isFlickingLeft())
 	  {
 		moveCommand('LEFT', timestamp);
 		leftFlick = false;
 		flickingDisabled = timestamp + 500;
-		alert('left');
 	  }
   }
   if (animalJump != 0) {
