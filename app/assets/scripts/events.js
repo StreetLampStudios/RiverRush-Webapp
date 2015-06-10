@@ -30,15 +30,15 @@ function AnimalDroppedEvent() {
   gotDroppedEvent = true;
 }
 
-function AnimalAddedEvent(variation, team, square, numberInLine) {
+function AnimalAddedEvent(variation, team, sector, numberInLine) {
   animalVariation = variation;
   setAnimalVariation(variation);
   teamID = team;
   teamName = teamNames[team];
   
-  if(square)
+  if(sector)
   {
-	setAnimalSquare(square);
+	setAnimalSector(sector);
   }
   if(numberInLine)
   {

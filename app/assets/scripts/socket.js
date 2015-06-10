@@ -109,7 +109,7 @@ var webSocket =
 						break;
 						
 					  case 'AnimalAddedEvent':
-						AnimalAddedEvent(vars['variation'], vars['team'], vars['square'], vars['numberInLine']);
+						AnimalAddedEvent(vars['variation'], vars['team'], vars['sector'], vars['numberInLine']);
 						break;
 						
 					  case 'TeamProgressEvent':
