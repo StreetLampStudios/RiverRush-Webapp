@@ -181,20 +181,20 @@ function loadResources()
 	updateLoaded();
 	// Images
 	
-	setLoadableImage("/assets/images/monkey_normal.png",1);
-	setLoadableImage("/assets/images/holding_device.png",1);
-	setLoadableImage("/assets/images/swipe_up.png",1);
-	setLoadableImage("/assets/images/up_arrow.png",1);
-	setLoadableImage("/assets/images/monkeyhead.png",1);
-	setLoadableImage("/assets/images/wave.png",1);
+	setLoadableImage("/assets/images/monkey_normal.png", 1);
+	setLoadableImage("/assets/images/holding_device.png", 1);
+	setLoadableImage("/assets/images/swipe_up.png", 1);
+	setLoadableImage("/assets/images/up_arrow.png", 1);
+	setLoadableImage("/assets/images/monkeyhead.png", 1);
+	setLoadableImage("/assets/images/wave.png", 1);
 	
 	// Sounds
 	var soundData = [];
 	// ADD THIS CODE LATER:
-	soundData['hit'] = {url: '/assets/sounds/playerhit.mp3',required:true};
-	soundData['kick'] = {url: '/assets/sounds/kick.mp3',required:true};
-	soundData['jump'] = {url: '/assets/sounds/jump.mp3',required:true};
-	//soundData['playerselectionMusic'] = {url: './sounds/Broken Reality.mp3',loop:true};
+	soundData['hit'] = {url: '/assets/sounds/playerhit.mp3', required:true};
+	soundData['kick'] = {url: '/assets/sounds/kick.mp3', required:true};
+	soundData['jump'] = {url: '/assets/sounds/jump.mp3', required:true};
+	//soundData['playerselectionMusic'] = {url: './sounds/Broken Reality.mp3', loop:true};
 	
 	loadSounds(soundData);
 }
