@@ -42,7 +42,6 @@ var webSocket =
       onClose: function (evt) {
         connection = false;
 		var reason = '';
-		console.log(evt);
 		if(evt.code == 1003 && evt.reason)
 		{
 			reason = evt.reason;
