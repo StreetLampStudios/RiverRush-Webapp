@@ -8,6 +8,8 @@
   <script type="text/javascript" src="./assets/scripts/main.js"></script>
   <script type="text/javascript" src="./assets/scripts/events.js"></script>
   <script type="text/javascript" src="./assets/scripts/vibration.js"></script>
+  <script type="text/javascript" src="./assets/scripts/howler.min.js"></script>
+  <script type="text/javascript" src="./assets/scripts/sound.js"></script>
   <script src="./assets/scripts/touch-emulator.js"></script>
   <script>TouchEmulator();</script>
 </head>
