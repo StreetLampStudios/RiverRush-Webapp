@@ -7,6 +7,8 @@ var xOffset = 0;
 var yOffset = 0;
 var zOffset = 0;
 
+var sound = true;
+
 var accelerometer_supported = -1;
 window.ondevicemotion = function (e) {
   if (accelerometer_supported < 1 && event && event.acceleration && event.acceleration.x) {
@@ -57,10 +59,12 @@ function jump(timestamp) {
   animalJump = timestamp;
   // Send jump signal here
   webSocket.sendJumpEvent();
+  playSound('jump');
   gotDroppedEvent = false;
 }
 
 function vote(direction, timestamp) {
+	playSound('roll');
 	moveCommand(direction, timestamp);
 	animalVoteDirection = direction;
 	animalVoteTime = timestamp;
@@ -68,6 +72,7 @@ function vote(direction, timestamp) {
 
 function fall(timestamp) {
   vibrate(500);
+  playSound('hit');
   animalFall = timestamp;
   animalDisplayFall = Math.max(animalFall, animalJump + 1000);
 }

@@ -197,10 +197,12 @@ function loadResources()
 	// Sounds
 	var soundData = [];
 	// ADD THIS CODE LATER:
-	/*soundData['playerhit'] = {url: './sounds/playerhit.mp3',required:true};
-	soundData['playerselectionMusic'] = {url: './sounds/Broken Reality.mp3',loop:true};*/
+	soundData['hit'] = {url: '/assets/sounds/playerhit.mp3', required:true};
+	soundData['kick'] = {url: '/assets/sounds/kick.mp3', required:true};
+	soundData['jump'] = {url: '/assets/sounds/jump.mp3', required:true};
+	//soundData['playerselectionMusic'] = {url: './sounds/Broken Reality.mp3', loop:true};
 	
-	//loadSounds(soundData);
+	loadSounds(soundData);
 }
 
 function setLoadedImages()
