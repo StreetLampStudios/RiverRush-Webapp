@@ -185,14 +185,14 @@ function loadResources()
 	updateLoaded();
 	// Images
 	
-	setLoadableImage("/assets/images/monkey_normal.png",1);
-	setLoadableImage("/assets/images/holding_device.png",1);
-	setLoadableImage("/assets/images/swipe_up.png",1);
-	setLoadableImage("/assets/images/up_arrow.png",1);
-	setLoadableImage("/assets/images/monkeyhead.png",1);
-	setLoadableImage("/assets/images/wave.png",1);
-	setLoadableImage("/assets/images/flag_red_small.png",1);
-	setLoadableImage("/assets/images/flag_green_small.png",1);
+	setLoadableImage("/assets/images/monkey_normal.png", 1);
+	setLoadableImage("/assets/images/holding_device.png", 1);
+	setLoadableImage("/assets/images/swipe_up.png", 1);
+	setLoadableImage("/assets/images/up_arrow.png", 1);
+	setLoadableImage("/assets/images/monkeyhead.png", 1);
+	setLoadableImage("/assets/images/wave.png", 1);
+	setLoadableImage("/assets/images/flag_red_small.png", 1);
+	setLoadableImage("/assets/images/flag_green_small.png", 1);
 	
 	// Sounds
 	var soundData = [];
