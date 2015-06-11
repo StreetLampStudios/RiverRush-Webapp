@@ -60,10 +60,32 @@ function jump(timestamp) {
   gotDroppedEvent = false;
 }
 
+function roll(direction, timestamp) {
+	moveCommand(direction, timestamp);
+	animalRollDirection = direction;
+	animalRollTime = timestamp;
+}
+
 function fall(timestamp) {
   vibrate(500);
   animalFall = timestamp;
   animalDisplayFall = Math.max(animalFall, animalJump + 1000);
+  if(animalRollTime != 0)
+  {
+	var t = timestamp - animalRollTime;
+	if(t < 500)
+	{
+		animalDisplayFall = animalFall + 500 - t;
+	}
+	else if(t >= 500 && t < 2000)
+	{
+		animalRollTime = timestamp - 500;
+	}
+	else if(t >= 2000 & t < 2500)
+	{
+		animalDisplayFall = animalFall + 2500 - t;
+	}
+  }
 }
 
 function getUp(timestamp) {
@@ -209,11 +231,17 @@ function checkWindowSize() {
   }
 }
 
+var animalRollDirection;
+var animalRollTime = 0;
+var doRoll = false;
+
 function stepgame(timestamp) {
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, 400, 400);
 
   var animalY = 0;
+  var animalX = 0;
+  var animalRotation = 0;
 
   checkWindowSize();
   
@@ -235,21 +263,20 @@ function stepgame(timestamp) {
   }
   if(flickingDisabled < timestamp)
   {
-	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && gotDroppedEvent) {
+	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && animalRollTime == 0 && gotDroppedEvent) {
 		// Jump
 		jump(timestamp);
 		flickingDisabled = timestamp + 500;
 	  }
-	  if(isFlickingRight() && animalJump == 0 && animalFall == 0)
+	  if(isFlickingRight() && animalJump == 0 && animalFall == 0 && animalRollTime == 0)
 	  {
-		moveCommand('RIGHT', timestamp);
-		rightFlick = false;
+		roll('RIGHT', timestamp);
 		flickingDisabled = timestamp + 500;
 	  }
-	  if(isFlickingLeft() && animalJump == 0 && animalFall == 0)
+	  if(isFlickingLeft() && animalJump == 0 && animalFall == 0 && animalRollTime == 0 || doRoll)
 	  {
-		moveCommand('LEFT', timestamp);
-		leftFlick = false;
+		doRoll = false;
+		roll('LEFT', timestamp);
 		flickingDisabled = timestamp + 500;
 	  }
   }
@@ -279,12 +306,49 @@ function stepgame(timestamp) {
       animalY = -80 + (timestamp - animalGetUp) / 500 * 80;
     }
   }
+  
+  if(animalRollTime != 0)
+  {
+	var t = timestamp - animalRollTime;
+	if(t < 2000)
+	{
+		animalX = Math.min((timestamp - animalRollTime)/500 * 60,60);
+		animalRotation = Math.min((timestamp - animalRollTime)/500 * 2 * Math.PI,2 * Math.PI);
+		if(animalRollDirection == 'LEFT')
+		{
+			animalX = animalX * -1;
+			animalRotation = animalRotation * -1;
+		}
+	}
+	else if(t > 2000 && t < 2500)
+	{
+		animalX = 60 - (timestamp - animalRollTime - 2000)/500 * 60;
+		animalRotation = 2 * Math.PI - (timestamp - animalRollTime)/500 * 2 * Math.PI;
+		if(animalRollDirection == 'LEFT')
+		{
+			animalX = animalX * -1;
+			animalRotation = animalRotation * -1;
+		}
+	}
+	else if(t >= 2500)
+	{
+		animalRollTime = 0;
+	}
+  }
   upFlick = false;
+  rightFlick = false;
+  leftFlick = false;
 
   calculateWaveSpot(timestamp);
 
+  var offset_x = 160 + animalX + 40;
+  var offset_y = 340 - 80 - 80 + 10 - animalY + 40;
   ctx.fillStyle = 'brown';
-  ctx.drawImage(animalImage['normal'], 160, 340 - 80 - 80 + 10 - animalY, 80, 80);
+  ctx.translate(offset_x, offset_y);
+  ctx.rotate(animalRotation); 
+  ctx.drawImage(animalImage['normal'], -40, -40, 80, 80);
+  ctx.rotate(-animalRotation); 
+  ctx.translate(-offset_x, -offset_y);
   ctx.fillRect(100, 340 - 80, 200, 80);
   ctx.font = "20px Arial";
   ctx.textAlign = 'center';
@@ -296,8 +360,8 @@ function stepgame(timestamp) {
   ctx.fillRect(0, 340, 400, 80);
 
   ctx.fillStyle = wavePattern;
-  var offset_x = -wave_x;
-  var offset_y = 340 - 60 - wave_y;
+  offset_x = -wave_x;
+  offset_y = 340 - 60 - wave_y;
   ctx.translate(offset_x, offset_y);
   ctx.fillRect(0, 0, 480, 80);
   ctx.translate(-offset_x, -offset_y);
