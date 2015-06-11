@@ -60,32 +60,16 @@ function jump(timestamp) {
   gotDroppedEvent = false;
 }
 
-function roll(direction, timestamp) {
+function vote(direction, timestamp) {
 	moveCommand(direction, timestamp);
-	animalRollDirection = direction;
-	animalRollTime = timestamp;
+	animalVoteDirection = direction;
+	animalVoteTime = timestamp;
 }
 
 function fall(timestamp) {
   vibrate(500);
   animalFall = timestamp;
   animalDisplayFall = Math.max(animalFall, animalJump + 1000);
-  if(animalRollTime != 0)
-  {
-	var t = timestamp - animalRollTime;
-	if(t < 500)
-	{
-		animalDisplayFall = animalFall + 500 - t;
-	}
-	else if(t >= 500 && t < 2000)
-	{
-		animalRollTime = timestamp - 500;
-	}
-	else if(t >= 2000 & t < 2500)
-	{
-		animalDisplayFall = animalFall + 2500 - t;
-	}
-  }
 }
 
 function getUp(timestamp) {
@@ -231,9 +215,8 @@ function checkWindowSize() {
   }
 }
 
-var animalRollDirection;
-var animalRollTime = 0;
-var doRoll = false;
+var animalVoteDirection;
+var animalVoteTime = 0;
 
 function stepgame(timestamp) {
   ctx.fillStyle = "#FFFFFF";
@@ -263,20 +246,19 @@ function stepgame(timestamp) {
   }
   if(flickingDisabled < timestamp)
   {
-	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && animalRollTime == 0 && gotDroppedEvent) {
+	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && gotDroppedEvent) {
 		// Jump
 		jump(timestamp);
 		flickingDisabled = timestamp + 500;
 	  }
-	  if(isFlickingRight() && animalJump == 0 && animalFall == 0 && animalRollTime == 0)
+	  if(isFlickingRight() && animalJump == 0 && animalFall == 0)
 	  {
-		roll('RIGHT', timestamp);
+		vote('RIGHT', timestamp);
 		flickingDisabled = timestamp + 500;
 	  }
-	  if(isFlickingLeft() && animalJump == 0 && animalFall == 0 && animalRollTime == 0 || doRoll)
+	  if(isFlickingLeft() && animalJump == 0 && animalFall == 0)
 	  {
-		doRoll = false;
-		roll('LEFT', timestamp);
+		vote('LEFT', timestamp);
 		flickingDisabled = timestamp + 500;
 	  }
   }
@@ -307,32 +289,15 @@ function stepgame(timestamp) {
     }
   }
   
-  if(animalRollTime != 0)
+  if(animalVoteTime && animalVoteTime > timestamp - 5000)
   {
-	var t = timestamp - animalRollTime;
-	if(t < 2000)
+	if(animalVoteDirection == 'LEFT')
 	{
-		animalX = Math.min((timestamp - animalRollTime)/500 * 60,60);
-		animalRotation = Math.min((timestamp - animalRollTime)/500 * 2 * Math.PI,2 * Math.PI);
-		if(animalRollDirection == 'LEFT')
-		{
-			animalX = animalX * -1;
-			animalRotation = animalRotation * -1;
-		}
+		ctx.drawImage(flagImage['green'], 160 + animalX - 40 + 20, 340 - 80 - 80 + 10 - animalY, 40, 40);
 	}
-	else if(t > 2000 && t < 2500)
+	else
 	{
-		animalX = 60 - (timestamp - animalRollTime - 2000)/500 * 60;
-		animalRotation = 2 * Math.PI - (timestamp - animalRollTime)/500 * 2 * Math.PI;
-		if(animalRollDirection == 'LEFT')
-		{
-			animalX = animalX * -1;
-			animalRotation = animalRotation * -1;
-		}
-	}
-	else if(t >= 2500)
-	{
-		animalRollTime = 0;
+		ctx.drawImage(flagImage['red'], 160 + animalX + 80 - 15, 340 - 80 - 80 + 10 - animalY, 40, 40);
 	}
   }
   upFlick = false;
