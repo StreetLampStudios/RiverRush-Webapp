@@ -41,7 +41,13 @@ var webSocket =
       },
       onClose: function (evt) {
         connection = false;
-        socketDisconnect();
+		var reason = '';
+		console.log(evt);
+		if(evt.code == 1003 && evt.reason)
+		{
+			reason = evt.reason;
+		}
+        socketDisconnect(reason);
         console.log("DISCONNECTED");
       },
       sendTest: function () {

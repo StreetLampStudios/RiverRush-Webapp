@@ -227,27 +227,35 @@ function updateLoaded()
 	}
 	if(!connected)
 	{
-		document.getElementById('loadingText').innerHTML = 'Connecting to the game at '+webSocket.socketURL+'...';
+		setLoadingText('Connecting to the game at '+webSocket.socketURL+'...');
 	}
 	else if(!allImagesLoaded && !allSoundsLoaded)
 	{
-		document.getElementById('loadingText').innerHTML = 'Loading sounds and images...';
+		setLoadingText('Loading sounds and images...');
 	}
 	else if(allImagesLoaded && !allSoundsLoaded)
 	{
-		document.getElementById('loadingText').innerHTML = 'Loading sounds...';
+		setLoadingText('Loading sounds...');
 	}
 	else if(!allImagesLoaded && allSoundsLoaded)
 	{
-		document.getElementById('loadingText').innerHTML = 'Loading images...';
+		setLoadingText('Loading images...');
 	}
 	else if(allImagesLoaded && allSoundsLoaded)
 	{
 		loaded = true;
-		document.getElementById('loadingText').innerHTML = 'Game loaded. Tap/Click the screen to continue';
+		setLoadingText('Game loaded. Tap/Click the screen to continue');
 		setUpImages();
 		showJoinButtons();
 	}
 	updateLoadedSoundsInfo();
 	updateLoadedImagesInfo();
+}
+
+function setLoadingText(text)
+{
+	if(document.getElementById('loadingText'))
+	{
+		document.getElementById('loadingText').innerHTML = text;
+	}
 }

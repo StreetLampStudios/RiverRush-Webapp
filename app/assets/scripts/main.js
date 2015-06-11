@@ -175,12 +175,17 @@ function socketOpenError() {
 }
 
 var socketDisconnectShowing = false;
-function socketDisconnect() {
+function socketDisconnect(reason) {
   if (socketDisconnectShowing) {
     return;
   }
   socketDisconnectShowing = true;
-  document.getElementById('loadingscreen').innerHTML = '<div class="overlay" id="loadingcontent"><span class="connectError">Connection to the server was lost</span><br><br><a href="/"><button>Reconnect</button></a></div>';
+  var reasonShower = '';
+  if(reason)
+  {
+	reasonShower = '<br>Reason: '+reason;
+  }
+  document.getElementById('loadingscreen').innerHTML = '<div class="overlay" id="loadingcontent"><span class="connectError">Connection to the server was lost'+reasonShower+'</span><br><br><a href="/"><button>Reconnect</button></a></div>';
   //document.getElementById('loadingscreen').style.opacity = 1;
   document.getElementById('loadingscreen').style.left = '0%';
 }
