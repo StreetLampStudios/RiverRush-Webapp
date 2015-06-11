@@ -293,13 +293,11 @@ function stepgame(timestamp) {
   {
 	if(animalVoteDirection == 'LEFT')
 	{
-		ctx.fillStyle = 'green';
-		ctx.fillRect(160 + animalX - 40, 340 - 80 - 80 + 10 - animalY, 40, 40);
+		ctx.drawImage(flagImage['green'], 160 + animalX - 40 + 20, 340 - 80 - 80 + 10 - animalY, 40, 40);
 	}
 	else
 	{
-		ctx.fillStyle = 'red';
-		ctx.fillRect(160 + animalX + 80, 340 - 80 - 80 + 10 - animalY, 40, 40);
+		ctx.drawImage(flagImage['red'], 160 + animalX + 80 - 15, 340 - 80 - 80 + 10 - animalY, 40, 40);
 	}
   }
   upFlick = false;
