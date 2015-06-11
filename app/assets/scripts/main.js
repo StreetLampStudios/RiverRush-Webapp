@@ -153,6 +153,7 @@ function createPattern(image) {
 }
 
 function socketOpenError() {
+  connected = false;
   socketDisconnectShowing = true;
   document.getElementById('loadingcontent').innerHTML = '<span class="connectError">Could not connect to the server</span><br><br><a href="/"><button>Retry</button></a>';
   onLoadingScreen = false;
@@ -163,6 +164,7 @@ function socketDisconnect(reason) {
   if (socketDisconnectShowing) {
     return;
   }
+  connected = false;
   socketDisconnectShowing = true;
   var reasonShower = '';
   if(reason)
