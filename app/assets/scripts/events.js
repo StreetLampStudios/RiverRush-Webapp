@@ -12,7 +12,9 @@ function GameWaitingEvent() {
 
 function GameFinishedEvent(winningTeam) {
 	gamestate = 'finished';
-	teamThatWon = winningTeam;
+	if(winningTeam == 0 || winningTeam == 1) {
+		teamThatWon = winningTeam;
+	}
 }
 
 function AnimalJumpedEvent() {
