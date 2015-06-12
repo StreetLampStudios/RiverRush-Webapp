@@ -1,17 +1,20 @@
 function GameStartedEvent() {
-
+	gamestate = 'game';
 }
 
 function GameStoppedEvent() {
-
+	gamestate = 'stopped';
 }
 
 function GameWaitingEvent() {
-
+	gamestate = 'waiting';
 }
 
-function GameFinishedEvent() {
-
+function GameFinishedEvent(winningTeam) {
+	gamestate = 'finished';
+	if(winningTeam == 0 || winningTeam == 1) {
+		teamThatWon = winningTeam;
+	}
 }
 
 function AnimalJumpedEvent() {
