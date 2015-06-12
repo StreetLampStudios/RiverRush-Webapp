@@ -1,20 +1,20 @@
 function GameStartedEvent() {
-	gamestate = 'game';
+    gamestate = 'game';
 }
 
 function GameStoppedEvent() {
-	gamestate = 'stopped';
+    gamestate = 'stopped';
 }
 
 function GameWaitingEvent() {
-	gamestate = 'waiting';
+    gamestate = 'waiting';
 }
 
 function GameFinishedEvent(winningTeam) {
-	gamestate = 'finished';
-	if(winningTeam == 0 || winningTeam == 1) {
-		teamThatWon = winningTeam;
-	}
+    gamestate = 'finished';
+    if (winningTeam == 0 || winningTeam == 1) {
+        teamThatWon = winningTeam;
+    }
 }
 
 function AnimalJumpedEvent() {
@@ -22,33 +22,31 @@ function AnimalJumpedEvent() {
 }
 
 function AnimalFellOffEvent() {
-  doFall = true;
+    doFall = true;
 }
 
 function AnimalReturnedToBoatEvent() {
-  doGetUp = true;
+    doGetUp = true;
 }
 
 function AnimalDroppedEvent() {
-  gotDroppedEvent = true;
+    gotDroppedEvent = true;
 }
 
 function AnimalAddedEvent(variation, team, sector, numberInLine) {
-  animalVariation = variation;
-  setAnimalVariation(variation);
-  teamID = team;
-  teamName = teamNames[team];
-  
-  if(sector)
-  {
-	setAnimalSector(sector);
-  }
-  if(numberInLine)
-  {
-	setAnimalNumberInLine(numberInLine);
-  }
+    animalVariation = variation;
+    setAnimalVariation(variation);
+    teamID = team;
+    teamName = teamNames[team];
+
+    if (sector) {
+        setAnimalSector(sector);
+    }
+    if (numberInLine) {
+        setAnimalNumberInLine(numberInLine);
+    }
 }
 
 function TeamProgressEvent(progress) {
-	updateBoatProgress(progress);
+    updateBoatProgress(progress);
 }
