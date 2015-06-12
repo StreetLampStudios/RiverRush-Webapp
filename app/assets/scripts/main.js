@@ -27,6 +27,7 @@ var teamNames = ['Team Pirate', 'Team Robot'];
 var animalY = 0;
 var animalYspeed = 0;
 var landedTime = 0;
+var teamThatWon;
 
 var JUMPDELAY = 750;
 
@@ -409,12 +410,12 @@ function stepGame(timestamp) {
 function waitingStateStart(timestamp) {
 	turnOffOverlay();
 	turnOffLookAtMonitor();
-	document.getElementById('upperBackground').style.background = 'purple';
-	document.getElementById('underBackground').style.background = 'purple';
+	document.getElementById('upperBackground').style.background = 'black';
+	document.getElementById('underBackground').style.background = 'black';
 }
 
 function stepGameWaiting(timestamp) {
-	ctx.fillStyle = 'red';
+	ctx.fillStyle = 'black';
 	ctx.fillRect(0, 0, 400, 400);
 	
 	ctx.font = "20px Arial";
@@ -426,18 +427,39 @@ function stepGameWaiting(timestamp) {
 function finishedStateStart(timestamp) {
 	turnOffOverlay();
 	turnOffLookAtMonitor();
-	document.getElementById('upperBackground').style.background = 'green';
-	document.getElementById('underBackground').style.background = 'green';
+	var bgColor = 'blue';
+	if((teamThatWon == 0 || teamThatWon == 1) && teamThatWon == teamID) {
+		bgColor = 'lime';
+	}
+	else if((teamThatWon == 0 || teamThatWon == 1) && teamThatWon != teamID) {
+		bgColor = 'red';
+	}
+	document.getElementById('upperBackground').style.background = bgColor;
+	document.getElementById('underBackground').style.background = bgColor;
 }
 
 function stepGameFinished(timestamp) {
-	ctx.fillStyle = 'lime';
+	
+	var screenText = 'The game finished in a tie!';
+	var ctxFillColor = 'blue';
+	
+	if((teamThatWon == 0 || teamThatWon == 1) && teamThatWon == teamID) {
+		screenText = 'Congratulations! Your team won!';
+		ctxFillColor = 'lime';
+	}
+	else if((teamThatWon == 0 || teamThatWon == 1) && teamThatWon != teamID) {
+		screenText = 'Unfortunately, your team lost...';
+		ctxFillColor = 'red';
+	}
+	
+	ctx.fillStyle = ctxFillColor;
 	ctx.fillRect(0, 0, 400, 400);
 
 	ctx.font = "20px Arial";
 	ctx.textAlign = 'center';
 	ctx.fillStyle = 'white';
-	ctx.fillText('THE GAME FINISHED! WOOOO!',200,200);
+	
+	ctx.fillText(screenText,200,200);
 }
 
 function stoppedStateStart(timestamp) {

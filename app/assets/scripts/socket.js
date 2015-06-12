@@ -94,7 +94,7 @@ var webSocket =
 						break;
 
 					  case 'GameFinishedEvent':
-						GameFinishedEvent();
+						GameFinishedEvent(vars['team']);
 						break;
 
 					  case 'AnimalJumpedEvent':

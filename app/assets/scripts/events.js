@@ -10,8 +10,9 @@ function GameWaitingEvent() {
 	gamestate = 'waiting';
 }
 
-function GameFinishedEvent() {
+function GameFinishedEvent(winningTeam) {
 	gamestate = 'finished';
+	teamThatWon = winningTeam;
 }
 
 function AnimalJumpedEvent() {
