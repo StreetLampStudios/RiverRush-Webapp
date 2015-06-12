@@ -7,6 +7,9 @@ var xOffset = 0;
 var yOffset = 0;
 var zOffset = 0;
 
+var sound = true;
+
+var iOS = ( navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? true : false );
 var accelerometer_supported = -1;
 window.ondevicemotion = function (e) {
   if (accelerometer_supported < 1 && event && event.acceleration && event.acceleration.x) {
@@ -16,7 +19,10 @@ window.ondevicemotion = function (e) {
   accelerationX = event.acceleration.x;
   accelerationY = event.acceleration.y;
   accelerationZ = event.acceleration.z;
-  checkFlick();
+  
+  if(iOS) {
+	accelerationX = -accelerationX;
+  }
 }
 
 var teamID;
@@ -24,6 +30,10 @@ var teamName = '';
 var teamNames = ['Team Pirate', 'Team Robot'];
 var animalY = 0;
 var animalYspeed = 0;
+var landedTime = 0;
+var teamThatWon;
+
+var JUMPDELAY = 750;
 
 var animalJump = 0;
 var animalFall = 0;
@@ -31,8 +41,9 @@ var animalDisplayFall = 0;
 var animalGetUp = 0;
 var animalVariation;
 
-var overlayvisible = true;
-var gamestate = 'loading';
+var overlayvisible = false;
+var gamestate = 'waiting';
+var previousGameState;
 
 var w = 0;
 var h = 0;
@@ -40,12 +51,41 @@ var h = 0;
 var servergamestate = 'waitingForState';
 
 function turnOffOverlay() {
-  if (overlayvisible) {
+	if (!overlayvisible) {
+		return;
+	}
     overlayvisible = false;
     document.getElementById('flickhelp').style.opacity = 0;
     document.getElementById('swipehelp').style.opacity = 0;
-    document.getElementById('lookAtMonitor').style.opacity = 1;
-  }
+}
+
+function turnOnOverlay() {
+	if(overlayvisible) {
+		return;
+	}
+	if (input_method == 'accelerometer') {
+		document.getElementById('flickhelp').style.opacity = 0.8;
+	}
+	else {
+		document.getElementById('swipehelp').style.opacity = 0.8;
+	}
+	overlayvisible = true;
+}
+
+function turnOnLookAtMonitor() {
+	document.getElementById('lookAtMonitor').style.opacity = 1;
+}
+
+function turnOffLookAtMonitor() {
+	document.getElementById('lookAtMonitor').style.opacity = 0;
+}
+
+function showBoat() {
+	document.getElementById('boatshower').style.display = 'block';
+}
+
+function hideBoat() {
+	document.getElementById('boatshower').style.display = 'none';
 }
 
 function moveCommand(directionCode, timestamp) {
@@ -54,38 +94,26 @@ function moveCommand(directionCode, timestamp) {
 
 function jump(timestamp) {
   turnOffOverlay();
+  turnOnLookAtMonitor();
   animalJump = timestamp;
   // Send jump signal here
   webSocket.sendJumpEvent();
+  playSound('jump');
   gotDroppedEvent = false;
 }
 
-function roll(direction, timestamp) {
+function vote(direction, timestamp) {
+	playSound('roll');
 	moveCommand(direction, timestamp);
-	animalRollDirection = direction;
-	animalRollTime = timestamp;
+	animalVoteDirection = direction;
+	animalVoteTime = timestamp;
 }
 
 function fall(timestamp) {
   vibrate(500);
+  playSound('hit');
   animalFall = timestamp;
   animalDisplayFall = Math.max(animalFall, animalJump + 1000);
-  if(animalRollTime != 0)
-  {
-	var t = timestamp - animalRollTime;
-	if(t < 500)
-	{
-		animalDisplayFall = animalFall + 500 - t;
-	}
-	else if(t >= 500 && t < 2000)
-	{
-		animalRollTime = timestamp - 500;
-	}
-	else if(t >= 2000 & t < 2500)
-	{
-		animalDisplayFall = animalFall + 2500 - t;
-	}
-  }
 }
 
 function getUp(timestamp) {
@@ -129,11 +157,9 @@ function showJoinButtons() {
   console.log(window.DeviceMotionEvent);
   if (accelerometer_supported == 1) {
     input_method = 'accelerometer';
-    document.getElementById('flickhelp').style.opacity = 0.8;
   }
   else {
     input_method = 'swipe';
-    document.getElementById('swipehelp').style.opacity = 0.8;
   }
 
   document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
@@ -164,25 +190,27 @@ function createPattern(image) {
 }
 
 function socketOpenError() {
+  connected = false;
   socketDisconnectShowing = true;
   document.getElementById('loadingcontent').innerHTML = '<span class="connectError">Could not connect to the server</span><br><br><a href="/"><button>Retry</button></a>';
   onLoadingScreen = false;
 }
 
 var socketDisconnectShowing = false;
-function socketDisconnect() {
+function socketDisconnect(reason) {
   if (socketDisconnectShowing) {
     return;
   }
+  connected = false;
   socketDisconnectShowing = true;
-  document.getElementById('loadingscreen').innerHTML = '<div class="overlay" id="loadingcontent"><span class="connectError">Connection to the server was lost</span><br><br><a href="/"><button>Reconnect</button></a></div>';
+  var reasonShower = '';
+  if(reason)
+  {
+	reasonShower = '<br>Reason: '+reason;
+  }
+  document.getElementById('loadingscreen').innerHTML = '<div class="overlay" id="loadingcontent"><span class="connectError">Connection to the server was lost'+reasonShower+'</span><br><br><a href="/"><button>Reconnect</button></a></div>';
   //document.getElementById('loadingscreen').style.opacity = 1;
   document.getElementById('loadingscreen').style.left = '0%';
-}
-
-function startStepping(timestamp) {
-	locationShowing = timestamp;
-	step(timestamp);
 }
 
 function updateBoatProgress(progress) {
@@ -193,9 +221,38 @@ function updateBoatProgress(progress) {
 }
 
 function step(timestamp) {
-  if (gamestate == 'game') {
-    stepgame(timestamp);
+  checkWindowSize();
+  switch(gamestate)
+  {
+	case 'game':
+		if(previousGameState != gamestate) {
+			gameStateStart(timestamp);
+		}
+		stepGame(timestamp);
+		break;
+		
+	case 'waiting':
+		if(previousGameState != gamestate) {
+			waitingStateStart(timestamp);
+		}
+		stepGameWaiting(timestamp);
+		break;
+		
+	case 'finished':
+		if(previousGameState != gamestate) {
+			finishedStateStart(timestamp);
+		}
+		stepGameFinished(timestamp);
+		break;
+		
+	case 'stopped':
+		if(previousGameState != gamestate) {
+			stoppedStateStart(timestamp);
+		}
+		stepGameStopped(timestamp);
+		break;
   }
+  previousGameState = gamestate;
   window.requestAnimationFrame(step);
 }
 
@@ -231,19 +288,24 @@ function checkWindowSize() {
   }
 }
 
-var animalRollDirection;
-var animalRollTime = 0;
-var doRoll = false;
+var animalVoteDirection;
+var animalVoteTime = 0;
 
-function stepgame(timestamp) {
+function gameStateStart(timestamp) {
+	turnOnOverlay();
+	showBoat();
+	locationShowing = timestamp;
+	document.getElementById('upperBackground').style.background = 'white';
+	document.getElementById('underBackground').style.background = '#3737ff';
+}
+
+function stepGame(timestamp) {
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, 400, 400);
 
   var animalY = 0;
   var animalX = 0;
   var animalRotation = 0;
-
-  checkWindowSize();
   
   if(locationShowing && locationShowing < timestamp - 3000)
   {
@@ -263,25 +325,25 @@ function stepgame(timestamp) {
   }
   if(flickingDisabled < timestamp)
   {
-	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && animalRollTime == 0 && gotDroppedEvent) {
+	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && gotDroppedEvent && landedTime < timestamp - JUMPDELAY) {
 		// Jump
 		jump(timestamp);
 		flickingDisabled = timestamp + 500;
 	  }
-	  if(isFlickingRight() && animalJump == 0 && animalFall == 0 && animalRollTime == 0)
+	  if(isFlickingRight() && animalJump == 0 && animalFall == 0)
 	  {
-		roll('RIGHT', timestamp);
+		vote('RIGHT', timestamp);
 		flickingDisabled = timestamp + 500;
 	  }
-	  if(isFlickingLeft() && animalJump == 0 && animalFall == 0 && animalRollTime == 0 || doRoll)
+	  if(isFlickingLeft() && animalJump == 0 && animalFall == 0)
 	  {
-		doRoll = false;
-		roll('LEFT', timestamp);
+		vote('LEFT', timestamp);
 		flickingDisabled = timestamp + 500;
 	  }
   }
   if (animalJump != 0) {
     if (animalJump < timestamp - 1000) {
+	  landedTime = animalJump + 1000;
       animalJump = 0;
     }
     else {
@@ -307,32 +369,15 @@ function stepgame(timestamp) {
     }
   }
   
-  if(animalRollTime != 0)
+  if(animalVoteTime && animalVoteTime > timestamp - 5000)
   {
-	var t = timestamp - animalRollTime;
-	if(t < 2000)
+	if(animalVoteDirection == 'LEFT')
 	{
-		animalX = Math.min((timestamp - animalRollTime)/500 * 60,60);
-		animalRotation = Math.min((timestamp - animalRollTime)/500 * 2 * Math.PI,2 * Math.PI);
-		if(animalRollDirection == 'LEFT')
-		{
-			animalX = animalX * -1;
-			animalRotation = animalRotation * -1;
-		}
+		ctx.drawImage(flagImage['green'], 160 + animalX - 40 + 20, 340 - 80 - 80 + 10 - animalY, 40, 40);
 	}
-	else if(t > 2000 && t < 2500)
+	else
 	{
-		animalX = 60 - (timestamp - animalRollTime - 2000)/500 * 60;
-		animalRotation = 2 * Math.PI - (timestamp - animalRollTime)/500 * 2 * Math.PI;
-		if(animalRollDirection == 'LEFT')
-		{
-			animalX = animalX * -1;
-			animalRotation = animalRotation * -1;
-		}
-	}
-	else if(t >= 2500)
-	{
-		animalRollTime = 0;
+		ctx.drawImage(flagImage['red'], 160 + animalX + 80 - 15, 340 - 80 - 80 + 10 - animalY, 40, 40);
 	}
   }
   upFlick = false;
@@ -355,6 +400,12 @@ function stepgame(timestamp) {
   ctx.fillStyle = 'white';
   ctx.fillText(teamName,200,340-50);
   
+  if(animalJump == 0 && animalDisplayFall == 0 && landedTime > timestamp - JUMPDELAY)
+  {
+	ctx.fillStyle = 'red';
+	ctx.fillRect(200 - 40, 340 - 80 - 10, 80, 10);
+  }
+  
 
   ctx.fillStyle = '#3737ff';
   ctx.fillRect(0, 340, 400, 80);
@@ -365,6 +416,85 @@ function stepgame(timestamp) {
   ctx.translate(offset_x, offset_y);
   ctx.fillRect(0, 0, 480, 80);
   ctx.translate(-offset_x, -offset_y);
+}
+
+function waitingStateStart(timestamp) {
+	turnOffOverlay();
+	turnOffLookAtMonitor();
+	hideBoat();
+	document.getElementById('upperBackground').style.background = 'black';
+	document.getElementById('underBackground').style.background = 'black';
+}
+
+function stepGameWaiting(timestamp) {
+	ctx.fillStyle = 'black';
+	ctx.fillRect(0, 0, 400, 400);
+	
+	ctx.font = "40px Arial";
+	ctx.textAlign = 'center';
+	ctx.fillStyle = 'white';
+	ctx.fillText('Waiting for the',200,180);
+	ctx.fillText('game to start',200,220);
+}
+
+function finishedStateStart(timestamp) {
+	turnOffOverlay();
+	turnOffLookAtMonitor();
+	hideBoat();
+	var bgColor;
+	if(teamThatWon == teamID) {
+		bgColor = 'lime';
+	}
+	else {
+		bgColor = 'red';
+	}
+	document.getElementById('upperBackground').style.background = bgColor;
+	document.getElementById('underBackground').style.background = bgColor;
+}
+
+function stepGameFinished(timestamp) {
+	
+	var screenText1;
+	var screenText2;
+	var ctxFillColor;
+	
+	if(teamThatWon == teamID) {
+		screenText1 = 'Congratulations!';
+		screenText2 = 'Your team won!';
+		ctxFillColor = 'lime';
+	}
+	else {
+		screenText1 = 'Too bad...';
+		screenText2 = 'Your team lost';
+		ctxFillColor = 'red';
+	}
+	
+	ctx.fillStyle = ctxFillColor;
+	ctx.fillRect(0, 0, 400, 400);
+
+	ctx.font = "40px Arial";
+	ctx.textAlign = 'center';
+	ctx.fillStyle = 'white';
+	
+	ctx.fillText(screenText1,200,180);
+	ctx.fillText(screenText2,200,220);
+}
+
+function stoppedStateStart(timestamp) {
+	turnOffOverlay();
+	turnOffLookAtMonitor();
+	hideBoat();
+	document.getElementById('upperBackground').style.background = 'pink';
+	document.getElementById('underBackground').style.background = 'pink';
+}
+
+function stepGameStopped(timestamp) {
+	ctx.fillStyle = 'black';
+	ctx.fillRect(0, 0, 400, 400);
+	ctx.font = "20px Arial";
+	ctx.textAlign = 'center';
+	ctx.fillStyle = 'white';
+	ctx.fillText('The game stopped.',200,200);
 }
 
 var wave_x = 0;
@@ -397,11 +527,9 @@ function choose_side(side) {
   console.log(window.DeviceMotionEvent);
   if (accelerometer_supported == 1) {
     input_method = 'accelerometer';
-    document.getElementById('flickhelp').style.opacity = 0.8;
   }
   else {
     input_method = 'swipe';
-    document.getElementById('swipehelp').style.opacity = 0.8;
   }
   
 	var team = 0;
@@ -416,9 +544,7 @@ function choose_side(side) {
   // Send join event
   webSocket.sendJoinEvent(team);
   
-  
-  gamestate = 'game';
-  window.requestAnimationFrame(startStepping);
+  window.requestAnimationFrame(step);
 }
 
 var a = false;
@@ -435,12 +561,6 @@ function isFlickingLeft() {
 function isFlickingRight() {
   return (accelerationX > rightbound && input_method == 'accelerometer') || (rightFlick && input_method == 'swipe');
 
-}
-
-function checkFlick() {
-  y = Math.round(accelerationY - yOffset);
-  z = Math.round(accelerationZ - zOffset);
-  x = Math.round(accelerationX - xOffset);
 }
 
 document.addEventListener('touchstart', handleTouchStart, false);

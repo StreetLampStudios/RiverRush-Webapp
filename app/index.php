@@ -8,6 +8,8 @@
   <script type="text/javascript" src="./assets/scripts/main.js"></script>
   <script type="text/javascript" src="./assets/scripts/events.js"></script>
   <script type="text/javascript" src="./assets/scripts/vibration.js"></script>
+  <script type="text/javascript" src="./assets/scripts/howler.min.js"></script>
+  <script type="text/javascript" src="./assets/scripts/sound.js"></script>
   <script src="./assets/scripts/touch-emulator.js"></script>
   <script>TouchEmulator();</script>
 </head>
@@ -25,14 +27,14 @@
 		</div>
 	  </div>
 	  <div class='normalBackground'>
-		<div class='airBackground'></div>
-		<div class='waterBackground'></div>
+		<div id='upperBackground' style='background-color: white;'></div>
+		<div id='underBackground' style='background-color: #3737ff;'></div>
 	  </div>
 	  <div class='overBackground'>
 		<div class='canvasContainer'>
 		   <div id='gameholder'>
 			<canvas id='drawCanvas' width="400" height="400"></canvas>
-			<div id='boatshower' style='width: 100%; right: 0%;'>
+			<div id='boatshower' style='width: 100%; right: 0%; display: block;'>
 				<div style='position: relative;'>
 				  <img src='/assets/images/boatshower.png' style='width: 100%;'>
 				  <div id='animalLocation' style='position: absolute; left: 42%; bottom: 50%; display: inline-block; text-align: left; width: 100%;'>
