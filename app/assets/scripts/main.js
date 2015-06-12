@@ -26,6 +26,9 @@ var teamName = '';
 var teamNames = ['Team Pirate', 'Team Robot'];
 var animalY = 0;
 var animalYspeed = 0;
+var landedTime = 0;
+
+var JUMPDELAY = 750;
 
 var animalJump = 0;
 var animalFall = 0;
@@ -258,7 +261,7 @@ function stepgame(timestamp) {
   }
   if(flickingDisabled < timestamp)
   {
-	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && gotDroppedEvent) {
+	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && gotDroppedEvent && landedTime < timestamp - JUMPDELAY) {
 		// Jump
 		jump(timestamp);
 		flickingDisabled = timestamp + 500;
@@ -276,6 +279,7 @@ function stepgame(timestamp) {
   }
   if (animalJump != 0) {
     if (animalJump < timestamp - 1000) {
+	  landedTime = animalJump + 1000;
       animalJump = 0;
     }
     else {
@@ -331,6 +335,12 @@ function stepgame(timestamp) {
   ctx.textAlign = 'center';
   ctx.fillStyle = 'white';
   ctx.fillText(teamName,200,340-50);
+  
+  if(animalJump == 0 && animalDisplayFall == 0 && landedTime > timestamp - JUMPDELAY)
+  {
+	ctx.fillStyle = 'red';
+	ctx.fillRect(200 - 40, 340 - 80 - 10, 80, 10);
+  }
   
 
   ctx.fillStyle = '#3737ff';
