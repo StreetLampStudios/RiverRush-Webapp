@@ -27,8 +27,8 @@
 		</div>
 	  </div>
 	  <div class='normalBackground'>
-		<div class='airBackground'></div>
-		<div class='waterBackground'></div>
+		<div id='upperBackground' style='background-color: white;'></div>
+		<div id='underBackground' style='background-color: #3737ff;'></div>
 	  </div>
 	  <div class='overBackground'>
 		<div class='canvasContainer'>

@@ -106,14 +106,12 @@ body {
   z-index: 0;
 }
 
-.airBackground {
-  background-color: white;
+#upperBackground {
   width: 100%;
   height: 50%;
 }
 
-.waterBackground {
-  background-color: #3737ff;
+#underBackground {
   width: 100%;
   height: 50%;
 }

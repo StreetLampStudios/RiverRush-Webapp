@@ -36,8 +36,9 @@ var animalDisplayFall = 0;
 var animalGetUp = 0;
 var animalVariation;
 
-var overlayvisible = true;
+var overlayvisible = false;
 var gamestate = 'loading';
+var previousGameState = gamestate;
 
 var w = 0;
 var h = 0;
@@ -45,12 +46,33 @@ var h = 0;
 var servergamestate = 'waitingForState';
 
 function turnOffOverlay() {
-  if (overlayvisible) {
+	if (!overlayvisible) {
+		return;
+	}
     overlayvisible = false;
     document.getElementById('flickhelp').style.opacity = 0;
     document.getElementById('swipehelp').style.opacity = 0;
-    document.getElementById('lookAtMonitor').style.opacity = 1;
-  }
+}
+
+function turnOnOverlay() {
+	if(overlayvisible) {
+		return;
+	}
+	if (input_method == 'accelerometer') {
+		document.getElementById('flickhelp').style.opacity = 0.8;
+	}
+	else {
+		document.getElementById('swipehelp').style.opacity = 0.8;
+	}
+	overlayvisible = true;
+}
+
+function turnOnLookAtMonitor() {
+	document.getElementById('lookAtMonitor').style.opacity = 1;
+}
+
+function turnOffLookAtMonitor() {
+	document.getElementById('lookAtMonitor').style.opacity = 0;
 }
 
 function moveCommand(directionCode, timestamp) {
@@ -59,6 +81,7 @@ function moveCommand(directionCode, timestamp) {
 
 function jump(timestamp) {
   turnOffOverlay();
+  turnOnLookAtMonitor();
   animalJump = timestamp;
   // Send jump signal here
   webSocket.sendJumpEvent();
@@ -121,11 +144,9 @@ function showJoinButtons() {
   console.log(window.DeviceMotionEvent);
   if (accelerometer_supported == 1) {
     input_method = 'accelerometer';
-    document.getElementById('flickhelp').style.opacity = 0.8;
   }
   else {
     input_method = 'swipe';
-    document.getElementById('swipehelp').style.opacity = 0.8;
   }
 
   document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
@@ -179,11 +200,6 @@ function socketDisconnect(reason) {
   document.getElementById('loadingscreen').style.left = '0%';
 }
 
-function startStepping(timestamp) {
-	locationShowing = timestamp;
-	step(timestamp);
-}
-
 function updateBoatProgress(progress) {
 	if(document.getElementById('boatshower').style.width == '30%')
 	{
@@ -192,9 +208,38 @@ function updateBoatProgress(progress) {
 }
 
 function step(timestamp) {
-  if (gamestate == 'game') {
-    stepgame(timestamp);
+  
+  switch(gamestate)
+  {
+	case 'game':
+		if(previousGameState != gamestate) {
+			gameStateStart(timestamp);
+		}
+		stepGame(timestamp);
+		break;
+		
+	case 'waiting':
+		if(previousGameState != gamestate) {
+			waitingStateStart(timestamp);
+		}
+		stepGameWaiting(timestamp);
+		break;
+		
+	case 'finished':
+		if(previousGameState != gamestate) {
+			finishedStateStart(timestamp);
+		}
+		stepGameFinished(timestamp);
+		break;
+		
+	case 'stopped':
+		if(previousGameState != gamestate) {
+			stoppedStateStart(timestamp);
+		}
+		stepGameStopped(timestamp);
+		break;
   }
+  previousGameState = gamestate;
   window.requestAnimationFrame(step);
 }
 
@@ -233,7 +278,14 @@ function checkWindowSize() {
 var animalVoteDirection;
 var animalVoteTime = 0;
 
-function stepgame(timestamp) {
+function gameStateStart(timestamp) {
+	turnOnOverlay();
+	locationShowing = timestamp;
+	document.getElementById('upperBackground').style.background = 'white';
+	document.getElementById('underBackground').style.background = '#3737ff';
+}
+
+function stepGame(timestamp) {
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, 400, 400);
 
@@ -354,6 +406,56 @@ function stepgame(timestamp) {
   ctx.translate(-offset_x, -offset_y);
 }
 
+function waitingStateStart(timestamp) {
+	turnOffOverlay();
+	turnOffLookAtMonitor();
+	document.getElementById('upperBackground').style.background = 'purple';
+	document.getElementById('underBackground').style.background = 'purple';
+}
+
+function stepGameWaiting(timestamp) {
+	ctx.fillStyle = 'red';
+	ctx.fillRect(0, 0, 400, 400);
+	
+	ctx.font = "20px Arial";
+	ctx.textAlign = 'center';
+	ctx.fillStyle = 'white';
+	ctx.fillText('Waiting for the game to start',200,200);
+}
+
+function finishedStateStart(timestamp) {
+	turnOffOverlay();
+	turnOffLookAtMonitor();
+	document.getElementById('upperBackground').style.background = 'green';
+	document.getElementById('underBackground').style.background = 'green';
+}
+
+function stepGameFinished(timestamp) {
+	ctx.fillStyle = 'lime';
+	ctx.fillRect(0, 0, 400, 400);
+
+	ctx.font = "20px Arial";
+	ctx.textAlign = 'center';
+	ctx.fillStyle = 'white';
+	ctx.fillText('THE GAME FINISHED! WOOOO!',200,200);
+}
+
+function stoppedStateStart(timestamp) {
+	turnOffOverlay();
+	turnOffLookAtMonitor();
+	document.getElementById('upperBackground').style.background = 'pink';
+	document.getElementById('underBackground').style.background = 'pink';
+}
+
+function stepGameStopped(timestamp) {
+	ctx.fillStyle = 'black';
+	ctx.fillRect(0, 0, 400, 400);
+	ctx.font = "20px Arial";
+	ctx.textAlign = 'center';
+	ctx.fillStyle = 'white';
+	ctx.fillText('The game stopped.',200,200);
+}
+
 var wave_x = 0;
 var wave_y = 0;
 
@@ -384,11 +486,9 @@ function choose_side(side) {
   console.log(window.DeviceMotionEvent);
   if (accelerometer_supported == 1) {
     input_method = 'accelerometer';
-    document.getElementById('flickhelp').style.opacity = 0.8;
   }
   else {
     input_method = 'swipe';
-    document.getElementById('swipehelp').style.opacity = 0.8;
   }
   
 	var team = 0;
@@ -405,7 +505,7 @@ function choose_side(side) {
   
   
   gamestate = 'game';
-  window.requestAnimationFrame(startStepping);
+  window.requestAnimationFrame(step);
 }
 
 var a = false;

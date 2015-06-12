@@ -1,17 +1,17 @@
 function GameStartedEvent() {
-
+	gamestate = 'game';
 }
 
 function GameStoppedEvent() {
-
+	gamestate = 'stopped';
 }
 
 function GameWaitingEvent() {
-
+	gamestate = 'waiting';
 }
 
 function GameFinishedEvent() {
-
+	gamestate = 'finished';
 }
 
 function AnimalJumpedEvent() {
