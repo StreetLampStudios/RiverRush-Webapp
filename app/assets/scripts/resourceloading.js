@@ -1,14 +1,14 @@
 var animalVariations = [];
-animalVariations[1] = [175, 66, 0];	// Normal
-animalVariations[2] = [50, 50, 50];		// Black
-animalVariations[3] = [0, 0, 255];		// Blue
-animalVariations[4] = [0, 255, 0];		// Green
-animalVariations[5] = [255, 102, 0];	// Orange
-animalVariations[6] = [215, 139, 169];	// Pink
-animalVariations[7] = [102, 0, 128];	// Purple
-animalVariations[8] = [212, 0, 3];		// Red
-animalVariations[9] = [255, 204, 164];	// White
-animalVariations[10] = [255, 198, 12];	// Yellow
+animalVariations[0] = [175, 66, 0];	// Normal
+animalVariations[1] = [50, 50, 50];		// Black
+animalVariations[2] = [2, 52, 125];		// Blue
+animalVariations[3] = [136, 168, 5];	// Green
+animalVariations[4] = [255, 102, 0];	// Orange
+animalVariations[5] = [215, 139, 169];	// Pink
+animalVariations[6] = [102, 0, 128];	// Purple
+animalVariations[7] = [212, 0, 3];		// Red
+animalVariations[8] = [255, 204, 164];	// White
+animalVariations[9] = [255, 198, 12];	// Yellow
 
 function generateTintImage(img, rgbks, red, green, blue) {
     var buff = document.createElement("canvas");
