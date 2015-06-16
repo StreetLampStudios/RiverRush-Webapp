@@ -1,15 +1,14 @@
 var animalVariations = [];
-animalVariations[0] = [255, 50, 50];
-animalVariations[1] = [50, 255, 50];
-animalVariations[2] = [50, 50, 255];
-animalVariations[3] = [255, 255, 50];
-animalVariations[4] = [50, 255, 255];
-animalVariations[5] = [255, 50, 255];
-animalVariations[6] = [100, 100, 100];
-animalVariations[7] = [0, 125, 255];
-animalVariations[8] = [150, 30, 165];
-animalVariations[9] = [140, 100, 255];
-animalVariations[10] = [255, 255, 255];
+animalVariations[1] = [175, 66, 0];	// Normal
+animalVariations[2] = [50, 50, 50];		// Black
+animalVariations[3] = [0, 0, 255];		// Blue
+animalVariations[4] = [0, 255, 0];		// Green
+animalVariations[5] = [255, 102, 0];	// Orange
+animalVariations[6] = [215, 139, 169];	// Pink
+animalVariations[7] = [102, 0, 128];	// Purple
+animalVariations[8] = [212, 0, 3];		// Red
+animalVariations[9] = [255, 204, 164];	// White
+animalVariations[10] = [255, 198, 12];	// Yellow
 
 function generateTintImage(img, rgbks, red, green, blue) {
     var buff = document.createElement("canvas");
@@ -57,7 +56,7 @@ function setAnimalVariation(variation) {
 }
 
 function setUpImages() {
-    animalImage['normal'] = loadImage('/assets/images/monkey_normal.png');
+    animalImage['normal'] = loadImage('/assets/images/monkey_white.png');
     animalImage['head'] = loadImage('/assets/images/monkeyhead.png');
     animalRGBKs = generateRGBKs(animalImage['normal']);
     animalheadRGBKs = generateRGBKs(animalImage['head']);
@@ -177,7 +176,7 @@ function loadResources() {
     updateLoaded();
     // Images
 
-    setLoadableImage("/assets/images/monkey_normal.png", 1);
+    setLoadableImage("/assets/images/monkey_white.png", 1);
     setLoadableImage("/assets/images/holding_device.png", 1);
     setLoadableImage("/assets/images/swipe_up.png", 1);
     setLoadableImage("/assets/images/up_arrow.png", 1);
