@@ -93,6 +93,7 @@ function moveCommand(directionCode, timestamp) {
 }
 
 function jump(timestamp) {
+  lastJumpTime = timestamp;
   turnOffOverlay();
   turnOnLookAtMonitor();
   animalJump = timestamp;
@@ -299,6 +300,7 @@ function gameStateStart(timestamp) {
 	document.getElementById('underBackground').style.background = '#3737ff';
 }
 
+var lastJumpTime = 0;
 function stepGame(timestamp) {
   ctx.fillStyle = "#FFFFFF";
   ctx.fillRect(0, 0, 400, 400);
@@ -325,7 +327,7 @@ function stepGame(timestamp) {
   }
   if(flickingDisabled < timestamp)
   {
-	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && gotDroppedEvent && landedTime < timestamp - JUMPDELAY) {
+	  if (isFlickingUp() && animalJump == 0 && animalFall == 0 && (gotDroppedEvent || timestamp - lastJumpTime > 5000) && landedTime < timestamp - JUMPDELAY) {
 		// Jump
 		jump(timestamp);
 		flickingDisabled = timestamp + 500;
