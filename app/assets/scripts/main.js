@@ -522,7 +522,12 @@ window.onload = function () {
   updateLoaded();
 }
 
+var chosen_side = false;
 function choose_side(side) {
+	if(chosen_side) {
+		return;
+	}
+	chosen_side = true;
 	// Decide on input method
   console.log(window.DeviceMotionEvent);
   if (accelerometer_supported == 1) {
