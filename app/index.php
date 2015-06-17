@@ -34,10 +34,10 @@
 		<div class='canvasContainer'>
 		   <div id='gameholder'>
 			<canvas id='drawCanvas' width="400" height="400"></canvas>
-			<div id='boatshower' style='width: 100%; right: 0%; display: block;'>
+			<div id='boatshower' style='width: 100%; left: 0%; display: block;'>
 				<div style='position: relative;'>
 				  <img src='/assets/images/boatshower.png' style='width: 100%;'>
-				  <div id='animalLocation' style='position: absolute; left: 42%; bottom: 50%; display: inline-block; text-align: left; width: 100%;'>
+				  <div id='animalLocation' style='position: absolute; left: 42%; bottom: 40%; display: inline-block; text-align: left; width: 100%;'>
 					<img src='/assets/images/youpointer.png' style='width: 15%;'><br>
 					<canvas id='monkeyhead' style='width: 15%;' width='107' height='107'></canvas>
 				  </div>
