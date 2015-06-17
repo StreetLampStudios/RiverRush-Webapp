@@ -10,6 +10,8 @@ animalVariations[7] = [212, 0, 3];		// Red
 animalVariations[8] = [255, 204, 164];	// White
 animalVariations[9] = [255, 198, 12];	// Yellow
 
+var colorOffset = 30;
+
 function generateTintImage(img, rgbks, red, green, blue) {
     var buff = document.createElement("canvas");
     buff.width = img.width;
@@ -23,15 +25,15 @@ function generateTintImage(img, rgbks, red, green, blue) {
 
     ctx.globalCompositeOperation = 'lighter';
     if (red > 0) {
-        ctx.globalAlpha = red / 255.0;
+        ctx.globalAlpha = Math.min(1.0, red / 255.0);
         ctx.drawImage(rgbks[0], 0, 0);
     }
     if (green > 0) {
-        ctx.globalAlpha = green / 255.0;
+        ctx.globalAlpha = Math.min(1.0, green / 255.0);
         ctx.drawImage(rgbks[1], 0, 0);
     }
     if (blue > 0) {
-        ctx.globalAlpha = blue / 255.0;
+        ctx.globalAlpha = Math.min(1.0, blue / 255.0);
         ctx.drawImage(rgbks[2], 0, 0);
     }
 
@@ -46,20 +48,39 @@ var animalImage = [];
 var flagImage = [];
 var waveImage;
 var wavePattern;
-var animalRGBKs;
+var monkeyRGBKs;
+var raccoonRGBKs;
 
 
 function setAnimalVariation(variation) {
-    animalImage['normal'] = generateTintImage(animalImage['normal'], animalRGBKs, animalVariations[variation][0], animalVariations[variation][1], animalVariations[variation][2]);
-    animalImage['head'] = generateTintImage(animalImage['head'], animalheadRGBKs, animalVariations[variation][0], animalVariations[variation][1], animalVariations[variation][2]);
-    colorMonkeyHead();
+	if(teamID == 0)
+	{
+		// Team monkey
+		animalImage['normal'] = generateTintImage(animalImage['monkey_normal'], monkeyRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
+		animalImage['head'] = generateTintImage(animalImage['monkeyhead'], monkeyheadRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
+	}
+	else
+	{
+		// Team raccoon
+		animalImage['normal'] = generateTintImage(animalImage['raccoon_normal'], raccoonRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
+		animalImage['head'] = generateTintImage(animalImage['raccoonhead'], raccoonheadRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
+    }
+	colorMonkeyHead();
 }
 
 function setUpImages() {
-    animalImage['normal'] = loadImage('/assets/images/monkey_white.png');
-    animalImage['head'] = loadImage('/assets/images/monkeyhead.png');
-    animalRGBKs = generateRGBKs(animalImage['normal']);
-    animalheadRGBKs = generateRGBKs(animalImage['head']);
+    animalImage['monkey_normal'] = loadImage('/assets/images/monkey_normal.png');
+    animalImage['monkeyhead'] = loadImage('/assets/images/monkeyhead.png');
+    monkeyRGBKs = generateRGBKs(animalImage['monkey_normal']);
+    monkeyheadRGBKs = generateRGBKs(animalImage['monkeyhead']);
+	
+	animalImage['raccoon_normal'] = loadImage('/assets/images/raccoon_normal.png');
+	animalImage['raccoonhead'] = loadImage('/assets/images/raccoonhead.png');
+    raccoonRGBKs = generateRGBKs(animalImage['raccoon_normal']);
+    raccoonheadRGBKs = generateRGBKs(animalImage['raccoonhead']);
+	
+	animalImage['normal'] = animalImage['monkey_normal'];
+	animalImage['head'] = animalImage['monkeyhead'];
 
     waveImage = loadImage('/assets/images/wave.png');
 
@@ -176,11 +197,13 @@ function loadResources() {
     updateLoaded();
     // Images
 
-    setLoadableImage("/assets/images/monkey_white.png", 1);
+    setLoadableImage("/assets/images/monkey_normal.png", 1);
+	setLoadableImage("/assets/images/raccoon_normal.png", 1);
     setLoadableImage("/assets/images/holding_device.png", 1);
     setLoadableImage("/assets/images/swipe_up.png", 1);
     setLoadableImage("/assets/images/up_arrow.png", 1);
     setLoadableImage("/assets/images/monkeyhead.png", 1);
+	setLoadableImage("/assets/images/raccoonhead.png", 1);
     setLoadableImage("/assets/images/wave.png", 1);
     setLoadableImage("/assets/images/flag_red_small.png", 1);
     setLoadableImage("/assets/images/flag_green_small.png", 1);

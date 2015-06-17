@@ -34,11 +34,11 @@ function AnimalDroppedEvent() {
 }
 
 function AnimalAddedEvent(variation, team, sector, numberInLine) {
-    animalVariation = variation;
-    setAnimalVariation(variation);
     teamID = team;
     teamName = teamNames[team];
 
+	animalVariation = variation;
+    setAnimalVariation(variation);
     if (sector) {
         setAnimalSector(sector);
     }

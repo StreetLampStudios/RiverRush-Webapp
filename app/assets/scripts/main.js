@@ -27,7 +27,7 @@ window.ondevicemotion = function (e) {
 
 var teamID;
 var teamName = '';
-var teamNames = ['Team Pirate', 'Team Robot'];
+var teamNames = ['Team Monkey', 'Team Raccoon'];
 var animalY = 0;
 var animalYspeed = 0;
 var landedTime = 0;
@@ -129,18 +129,18 @@ function socketOpened() {
 }
 
 var sectors = [];
-sectors['FRONT'] = 1;
-sectors['FRONT_MIDDLE'] = 2;
+sectors['FRONT'] = 5;
+sectors['FRONT_MIDDLE'] = 4;
 sectors['MIDDLE'] = 3;
-sectors['BACK_MIDDLE'] = 4;
-sectors['BACK'] = 5;
+sectors['BACK_MIDDLE'] = 2;
+sectors['BACK'] = 1;
 function setAnimalSector(sector)
 {
 	sectorID = sectors[sector];
-	document.getElementById('animalLocation').style.left = 14 + sectorID * 14 + '%';
+	document.getElementById('animalLocation').style.left = -12 + sectorID * 14 + '%';
 }
 
-var totalInLine = 5;
+var totalInLine = 10;
 function setAnimalNumberInLine(numberInLine)
 {
 	inLinePercentage = numberInLine/totalInLine;
@@ -216,7 +216,7 @@ function socketDisconnect(reason) {
 function updateBoatProgress(progress) {
 	if(document.getElementById('boatshower').style.width == '30%')
 	{
-		document.getElementById('boatshower').style.right = Math.max(Math.min(progress,100),0) * 0.7 + '%';
+		document.getElementById('boatshower').style.left = Math.max(Math.min(progress,100),0) * 0.7 + '%';
 	}
 }
 
@@ -387,7 +387,7 @@ function stepGame(timestamp) {
   calculateWaveSpot(timestamp);
 
   var offset_x = 160 + animalX + 40;
-  var offset_y = 340 - 80 - 80 + 10 - animalY + 40;
+  var offset_y = 340 - 80 - 80 + 13 - animalY + 40;
   ctx.fillStyle = 'brown';
   ctx.translate(offset_x, offset_y);
   ctx.rotate(animalRotation); 
