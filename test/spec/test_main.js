@@ -45,6 +45,8 @@ describe("Main Testing", function() {
 		expect(isFlickingUp()).toBe(false);
 		
 		input_method = 'accelerometer';
+		accelerationZ = 0;
+		accelerationY = 0;
 		expect(isFlickingUp()).toBe(false);
 		
 		accelerationZ = -upperbound * 3;
@@ -65,6 +67,7 @@ describe("Main Testing", function() {
 		expect(isFlickingLeft()).toBe(false);
 		
 		input_method = 'accelerometer';
+		accelerationX = 0;
 		expect(isFlickingLeft()).toBe(false);
 		
 		accelerationX = leftbound * 3;
@@ -82,6 +85,7 @@ describe("Main Testing", function() {
 		expect(isFlickingRight()).toBe(false);
 		
 		input_method = 'accelerometer';
+		accelerationX = 0;
 		expect(isFlickingRight()).toBe(false);
 		
 		accelerationX = rightbound * 3;
