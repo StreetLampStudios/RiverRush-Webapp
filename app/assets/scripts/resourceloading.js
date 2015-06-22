@@ -53,19 +53,17 @@ var raccoonRGBKs;
 
 
 function setAnimalVariation(variation) {
-	if(teamID == 0)
-	{
-		// Team monkey
-		animalImage['normal'] = generateTintImage(animalImage['monkey_normal'], monkeyRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
-		animalImage['head'] = generateTintImage(animalImage['monkeyhead'], monkeyheadRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
-	}
-	else
-	{
-		// Team raccoon
-		animalImage['normal'] = generateTintImage(animalImage['raccoon_normal'], raccoonRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
-		animalImage['head'] = generateTintImage(animalImage['raccoonhead'], raccoonheadRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
+    if (teamID == 0) {
+        // Team monkey
+        animalImage['normal'] = generateTintImage(animalImage['monkey_normal'], monkeyRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
+        animalImage['head'] = generateTintImage(animalImage['monkeyhead'], monkeyheadRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
     }
-	colorMonkeyHead();
+    else {
+        // Team raccoon
+        animalImage['normal'] = generateTintImage(animalImage['raccoon_normal'], raccoonRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
+        animalImage['head'] = generateTintImage(animalImage['raccoonhead'], raccoonheadRGBKs, animalVariations[variation][0] + colorOffset, animalVariations[variation][1] + colorOffset, animalVariations[variation][2] + colorOffset);
+    }
+    colorMonkeyHead();
 }
 
 function setUpImages() {
@@ -73,14 +71,14 @@ function setUpImages() {
     animalImage['monkeyhead'] = loadImage('/assets/images/monkeyhead.png');
     monkeyRGBKs = generateRGBKs(animalImage['monkey_normal']);
     monkeyheadRGBKs = generateRGBKs(animalImage['monkeyhead']);
-	
-	animalImage['raccoon_normal'] = loadImage('/assets/images/raccoon_normal.png');
-	animalImage['raccoonhead'] = loadImage('/assets/images/raccoonhead.png');
+
+    animalImage['raccoon_normal'] = loadImage('/assets/images/raccoon_normal.png');
+    animalImage['raccoonhead'] = loadImage('/assets/images/raccoonhead.png');
     raccoonRGBKs = generateRGBKs(animalImage['raccoon_normal']);
     raccoonheadRGBKs = generateRGBKs(animalImage['raccoonhead']);
-	
-	animalImage['normal'] = animalImage['monkey_normal'];
-	animalImage['head'] = animalImage['monkeyhead'];
+
+    animalImage['normal'] = animalImage['monkey_normal'];
+    animalImage['head'] = animalImage['monkeyhead'];
 
     waveImage = loadImage('/assets/images/wave.png');
 
@@ -198,12 +196,12 @@ function loadResources() {
     // Images
 
     setLoadableImage("/assets/images/monkey_normal.png", 1);
-	setLoadableImage("/assets/images/raccoon_normal.png", 1);
+    setLoadableImage("/assets/images/raccoon_normal.png", 1);
     setLoadableImage("/assets/images/holding_device.png", 1);
     setLoadableImage("/assets/images/swipe_up.png", 1);
     setLoadableImage("/assets/images/up_arrow.png", 1);
     setLoadableImage("/assets/images/monkeyhead.png", 1);
-	setLoadableImage("/assets/images/raccoonhead.png", 1);
+    setLoadableImage("/assets/images/raccoonhead.png", 1);
     setLoadableImage("/assets/images/wave.png", 1);
     setLoadableImage("/assets/images/flag_red_small.png", 1);
     setLoadableImage("/assets/images/flag_green_small.png", 1);

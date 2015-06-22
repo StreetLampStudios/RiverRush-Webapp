@@ -37,7 +37,7 @@ function AnimalAddedEvent(variation, team, sector, numberInLine) {
     teamID = team;
     teamName = teamNames[team];
 
-	animalVariation = variation;
+    animalVariation = variation;
     setAnimalVariation(variation);
     if (sector) {
         setAnimalSector(sector);
