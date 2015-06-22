@@ -517,11 +517,18 @@ function sendTest() {
   webSocket.sendTest();
 }
 
+var noSleep;
+
+function enableNoSleep() {
+  noSleep.enable();
+}
+
 window.onload = function () {
   // Connect to the socket
   webSocket.init();
   loadResources();
   updateLoaded();
+  noSleep = new NoSleep();
 }
 
 var chosen_side = false;
@@ -550,6 +557,8 @@ function choose_side(side) {
   }
   // Send join event
   webSocket.sendJoinEvent(team);
+  
+  enableNoSleep();
   
   window.requestAnimationFrame(step);
 }

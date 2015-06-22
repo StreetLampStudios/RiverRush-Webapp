@@ -11,6 +11,7 @@
   <script type="text/javascript" src="./assets/scripts/howler.min.js"></script>
   <script type="text/javascript" src="./assets/scripts/sound.js"></script>
   <script src="./assets/scripts/touch-emulator.js"></script>
+  <script type="text/javascript" src="./assets/scripts/NoSleep.min.js"></script>
   <script>TouchEmulator();</script>
 </head>
 <body>
