@@ -15,13 +15,19 @@ describe("Testing Resource Handling", function() {
 	});
 	
 	it("should update the progress of the amount of images and sounds to be loaded", function () {
-		var imagesToLoad = imagesToBeLoaded;
-		var soundsToLoad = soundsToBeLoaded;
+		var oldImagesLoaded = imagesLoaded;
+		var oldSoundsLoaded = soundsLoaded;
 		
 		newImageLoaded();
-		expect(imagesToBeLoaded).toBe(imagesToLoad - 1);
+		expect(imagesLoaded).toBe(oldImagesLoaded + 1);
+		
+		newImageLoaded();
+		expect(imagesLoaded).toBe(oldImagesLoaded + 2);
 		
 		newSoundLoaded();
-		expect(soundsToBeLoaded).toBe(soundsToBeLoaded - 1);
+		expect(soundsLoaded).toBe(oldSoundsLoaded + 1);
+		
+		newSoundLoaded();
+		expect(soundsLoaded).toBe(oldSoundsLoaded + 2);
 	});
 });
