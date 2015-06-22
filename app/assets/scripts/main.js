@@ -163,7 +163,7 @@ function showJoinButtons() {
     input_method = 'swipe';
   }
 
-  document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><input class="choosesidebutton" id="sideleftbutton" type="button" value="Left" onClick="choose_side(\'left\');"> <input class="choosesidebutton" id="siderightbutton" type="button" value="Right" onClick="choose_side(\'right\');">';
+  document.getElementById('loadingcontent').innerHTML = '<span class="choosesidetitle">Choose a side</span><br><br><button class="choosesidebutton" id="sideleftbutton" type="button" onClick="choose_side(\'left\');">Team Monkey<br>(Left side of the room)</button> <button class="choosesidebutton" id="siderightbutton"onClick="choose_side(\'right\');">Team Raccoon<br>(Right side of the room)</button>';
   c = document.getElementById("drawCanvas");
   ctx = c.getContext("2d");
   onLoadingScreen = false;
@@ -517,11 +517,18 @@ function sendTest() {
   webSocket.sendTest();
 }
 
+var noSleep;
+
+function enableNoSleep() {
+  noSleep.enable();
+}
+
 window.onload = function () {
   // Connect to the socket
   webSocket.init();
   loadResources();
   updateLoaded();
+  noSleep = new NoSleep();
 }
 
 var chosen_side = false;
@@ -550,6 +557,8 @@ function choose_side(side) {
   }
   // Send join event
   webSocket.sendJoinEvent(team);
+  
+  enableNoSleep();
   
   window.requestAnimationFrame(step);
 }
