@@ -4,7 +4,7 @@ describe("Main Testing", function() {
 		turnOnOverlay();
 		expect(overlayvisible).toBe(true);
 		turnOnOverlay();
-		expect(overlayvisible).toBe(false);
+		expect(overlayvisible).toBe(true);
 	});
 	
 	it("should turn off the overlay correctly", function () {
@@ -15,7 +15,4 @@ describe("Main Testing", function() {
 		expect(overlayvisible).toBe(false);
 	});
 	
-	it("should fail", function () {
-		expect(true).toBe(false);
-	});
 });
