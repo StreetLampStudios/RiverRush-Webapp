@@ -14,4 +14,8 @@ describe("Main Testing", function() {
 		turnOffOverlay();
 		expect(overlayvisible).toBe(false);
 	});
+	
+	it("should fail", function () {
+		expect(true).toBe(false);
+	});
 });
